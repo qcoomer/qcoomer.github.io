@@ -84,7 +84,11 @@
       text-decoration: none;
       font-weight: 700;
     }
-    .pill { color: var(--muted-2); }
+    .pill {
+      color: var(--muted-2);
+      appearance: none;
+      cursor: pointer;
+    }
     h1 {
       margin: 0;
       font-size: clamp(1.7rem, 5vw, 2.6rem);
@@ -146,6 +150,9 @@
       padding: 0 16px;
       font-size: 1rem;
       appearance: none;
+    }
+    select option {
+      color: #0f172a;
     }
     input::placeholder { color: #94a3b8; }
     .players {
@@ -410,6 +417,12 @@
       color: #fecaca;
       border: 1px solid rgba(239,68,68,0.28);
     }
+    .button-row {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
     button:disabled {
       opacity: 0.55;
       cursor: not-allowed;
@@ -512,6 +525,109 @@
     }
     .expired { color: #fca5a5; }
 
+    .stats-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 40;
+      display: none;
+      background: rgba(2, 6, 23, 0.72);
+      backdrop-filter: blur(10px);
+      padding: 18px;
+      place-items: center;
+    }
+    .stats-modal.active {
+      display: grid;
+    }
+    .stats-card {
+      width: min(100%, 920px);
+      max-height: min(88dvh, 900px);
+      overflow: auto;
+      border-radius: 28px;
+      background: linear-gradient(180deg, rgba(15,23,42,0.97), rgba(30,41,59,0.98));
+      border: 1px solid rgba(255,255,255,0.10);
+      box-shadow: var(--shadow);
+      padding: 18px;
+      display: grid;
+      gap: 16px;
+    }
+    .stats-header {
+      display: flex;
+      align-items: start;
+      justify-content: space-between;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .stats-header h2 {
+      margin: 0;
+      font-size: 1.3rem;
+      letter-spacing: -0.03em;
+    }
+    .stats-sub {
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.45;
+    }
+    .stats-grid {
+      display: grid;
+      gap: 12px;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    }
+    .stat-player-card {
+      border-radius: 20px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.04);
+      padding: 14px;
+      display: grid;
+      gap: 12px;
+    }
+    .stat-player-name {
+      font-size: 1.04rem;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+    }
+    .stat-meta {
+      color: var(--muted);
+      font-size: 0.88rem;
+    }
+    .stat-list {
+      display: grid;
+      gap: 8px;
+    }
+    .stat-row {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      align-items: center;
+      padding: 9px 0;
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+      font-size: 0.94rem;
+    }
+    .stat-row:last-child {
+      border-bottom: 0;
+      padding-bottom: 0;
+    }
+    .stat-row strong {
+      font-size: 1rem;
+      letter-spacing: -0.02em;
+    }
+    .turn-history {
+      display: grid;
+      gap: 8px;
+    }
+    .history-chip-wrap {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .history-chip {
+      border-radius: 999px;
+      padding: 8px 12px;
+      background: rgba(255,255,255,0.08);
+      color: #e2e8f0;
+      font-size: 0.88rem;
+      font-weight: 700;
+    }
+
     @media (min-width: 940px) {
       .config {
         grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
@@ -530,6 +646,8 @@
       .orientation { width: 94vw; height: min(76dvh, 640px); }
       .current-player { font-size: 1.4rem; }
       .preview-center { inset: 31%; }
+      .stats-modal { padding: 10px; }
+      .stats-card { padding: 14px; }
     }
   </style>
 </head>
@@ -556,11 +674,11 @@
         <div class="time-grid">
           <label>
             Minutes per turn
-            <input id="minutesInput" type="number" min="0" max="59" inputmode="numeric" value="2">
+            <select id="minutesInput" aria-label="Minutes per turn"></select>
           </label>
           <label>
             Seconds per turn
-            <input id="secondsInput" type="number" min="0" max="59" inputmode="numeric" value="0">
+            <select id="secondsInput" aria-label="Seconds per turn"></select>
           </label>
         </div>
 
@@ -577,6 +695,7 @@
 
         <div class="actions">
           <button class="primary" id="startBtn">Start turn counter</button>
+          <button class="secondary" id="showStatsBtn" type="button">Show stats</button>
           <button class="secondary" id="restoreBtn" type="button">Restore defaults</button>
         </div>
       </section>
@@ -594,6 +713,7 @@
         <div class="legend">
           <div><strong>Seat selection:</strong> Use the top, left, right, and bottom buttons inside each player card.</div>
           <div><strong>Turn flow:</strong> The timer can be tapped early or after time runs out to pass to the next player.</div>
+          <div><strong>Sounds:</strong> A ding plays at 10 seconds remaining, and a buzzer plays once when time reaches 0.</div>
         </div>
       </section>
     </section>
@@ -602,7 +722,10 @@
   <section class="play" id="playView" aria-hidden="true">
     <div class="play-topbar">
       <div class="pill" id="turnInfo">Turn 1 of 1</div>
-      <button class="pill danger" id="resetBtn" type="button">Reset</button>
+      <div class="button-row">
+        <button class="pill" id="playStatsBtn" type="button">Stats</button>
+        <button class="pill danger" id="resetBtn" type="button">Reset</button>
+      </div>
     </div>
 
     <div class="play-stage">
@@ -614,6 +737,19 @@
           <div class="timer-caption" id="timerCaption">Tap anywhere on the timer when the turn ends to face the next player and restart the countdown.</div>
         </button>
       </div>
+    </div>
+  </section>
+
+  <section class="stats-modal" id="statsModal" aria-hidden="true">
+    <div class="stats-card">
+      <div class="stats-header">
+        <div>
+          <h2>Game stats</h2>
+          <div class="stats-sub">Turn counts, total time, average turn length, longest and shortest turns, and per-turn history for each player.</div>
+        </div>
+        <button class="pill" id="closeStatsBtn" type="button">Close</button>
+      </div>
+      <div class="stats-grid" id="statsGrid"></div>
     </div>
   </section>
 
@@ -639,13 +775,22 @@
       right: '-90deg'
     };
 
+    const minuteOptions = Array.from({ length: 31 }, (_, i) => i);
+    const secondOptions = [0, 5, 10, 15, 20, 30, 45, 50, 55];
+
     const state = {
       totalSeconds: 120,
       remainingSeconds: 120,
       players: structuredClone(defaults),
       activePlayers: [],
       currentIndex: 0,
-      intervalId: null
+      intervalId: null,
+      dingPlayed: false,
+      zeroSoundPlayed: false,
+      turnStartedAt: null,
+      audioUnlocked: false,
+      stats: {},
+      gameStarted: false
     };
 
     const els = {
@@ -655,6 +800,7 @@
       minutesInput: document.getElementById('minutesInput'),
       secondsInput: document.getElementById('secondsInput'),
       startBtn: document.getElementById('startBtn'),
+      showStatsBtn: document.getElementById('showStatsBtn'),
       restoreBtn: document.getElementById('restoreBtn'),
       playView: document.getElementById('playView'),
       resetBtn: document.getElementById('resetBtn'),
@@ -664,14 +810,100 @@
       currentSeatName: document.getElementById('currentSeatName'),
       turnInfo: document.getElementById('turnInfo'),
       timerCaption: document.getElementById('timerCaption'),
-      orientationStage: document.getElementById('orientationStage')
+      orientationStage: document.getElementById('orientationStage'),
+      playStatsBtn: document.getElementById('playStatsBtn'),
+      statsModal: document.getElementById('statsModal'),
+      statsGrid: document.getElementById('statsGrid'),
+      closeStatsBtn: document.getElementById('closeStatsBtn')
     };
+
+    let audioCtx = null;
+
+    function ensureAudioContext() {
+      if (!audioCtx) {
+        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContextClass) return null;
+        audioCtx = new AudioContextClass();
+      }
+      if (audioCtx.state === 'suspended') {
+        audioCtx.resume().catch(() => {});
+      }
+      state.audioUnlocked = true;
+      return audioCtx;
+    }
+
+    function playTone(frequency, duration, type = 'sine', volume = 0.04) {
+      const ctx = ensureAudioContext();
+      if (!ctx) return;
+
+      const oscillator = ctx.createOscillator();
+      const gainNode = ctx.createGain();
+
+      oscillator.type = type;
+      oscillator.frequency.setValueAtTime(frequency, ctx.currentTime);
+      gainNode.gain.setValueAtTime(0.0001, ctx.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(volume, ctx.currentTime + 0.01);
+      gainNode.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration);
+
+      oscillator.connect(gainNode);
+      gainNode.connect(ctx.destination);
+
+      oscillator.start(ctx.currentTime);
+      oscillator.stop(ctx.currentTime + duration + 0.02);
+    }
+
+    function playTenSecondDing() {
+      playTone(880, 0.18, 'sine', 0.05);
+      window.setTimeout(() => playTone(1174.66, 0.16, 'sine', 0.045), 120);
+    }
+
+    function playZeroBuzzer() {
+      playTone(180, 0.55, 'sawtooth', 0.06);
+      window.setTimeout(() => playTone(130, 0.5, 'square', 0.05), 140);
+    }
 
     function formatTime(totalSeconds) {
       const seconds = Math.max(0, Number(totalSeconds) || 0);
       const mins = Math.floor(seconds / 60);
       const secs = seconds % 60;
       return `${mins}:${String(secs).padStart(2, '0')}`;
+    }
+
+    function formatDurationVerbose(totalSeconds) {
+      const seconds = Math.max(0, Math.round(Number(totalSeconds) || 0));
+      const mins = Math.floor(seconds / 60);
+      const secs = seconds % 60;
+      if (mins === 0) return `${secs}s`;
+      return `${mins}m ${String(secs).padStart(2, '0')}s`;
+    }
+
+    function formatAverage(totalSeconds) {
+      const seconds = Math.max(0, Number(totalSeconds) || 0);
+      const mins = Math.floor(seconds / 60);
+      const secs = Math.round(seconds % 60);
+      return `${mins}:${String(secs).padStart(2, '0')}`;
+    }
+
+    function populateTimeSelectors() {
+      els.minutesInput.innerHTML = minuteOptions
+        .map(value => `<option value="${value}">${value} min</option>`)
+        .join('');
+
+      els.secondsInput.innerHTML = secondOptions
+        .map(value => `<option value="${value}">${value} sec</option>`)
+        .join('');
+
+      if (!Array.from(els.minutesInput.options).some(option => Number(option.value) === 2)) {
+        els.minutesInput.value = '0';
+      } else {
+        els.minutesInput.value = '2';
+      }
+
+      if (!Array.from(els.secondsInput.options).some(option => Number(option.value) === 0)) {
+        els.secondsInput.value = String(secondOptions[0] ?? 0);
+      } else {
+        els.secondsInput.value = '0';
+      }
     }
 
     function seatPickerMarkup(index, selectedSeat) {
@@ -888,13 +1120,138 @@
       els.statusText.textContent = message;
     }
 
+    function buildFreshStats(activePlayers) {
+      const stats = {};
+      activePlayers.forEach(player => {
+        const key = playerKey(player);
+        stats[key] = {
+          name: player.name,
+          seat: player.seat,
+          turns: 0,
+          totalSeconds: 0,
+          averageSeconds: 0,
+          longestSeconds: 0,
+          shortestSeconds: null,
+          lastTurnSeconds: 0,
+          durations: []
+        };
+      });
+      return stats;
+    }
+
+    function playerKey(player) {
+      return `${player.name}__${player.seat}__${player.order}`;
+    }
+
+    function recordCurrentTurnStats() {
+      if (!state.gameStarted || !state.activePlayers.length || state.currentIndex < 0) return;
+
+      const currentPlayer = state.activePlayers[state.currentIndex];
+      if (!currentPlayer) return;
+
+      const elapsed = Math.max(0, state.totalSeconds - state.remainingSeconds);
+      const key = playerKey(currentPlayer);
+      if (!state.stats[key]) {
+        state.stats[key] = {
+          name: currentPlayer.name,
+          seat: currentPlayer.seat,
+          turns: 0,
+          totalSeconds: 0,
+          averageSeconds: 0,
+          longestSeconds: 0,
+          shortestSeconds: null,
+          lastTurnSeconds: 0,
+          durations: []
+        };
+      }
+
+      const playerStats = state.stats[key];
+      playerStats.turns += 1;
+      playerStats.totalSeconds += elapsed;
+      playerStats.lastTurnSeconds = elapsed;
+      playerStats.longestSeconds = Math.max(playerStats.longestSeconds, elapsed);
+      playerStats.shortestSeconds = playerStats.shortestSeconds === null
+        ? elapsed
+        : Math.min(playerStats.shortestSeconds, elapsed);
+      playerStats.durations.push(elapsed);
+      playerStats.averageSeconds = playerStats.turns > 0
+        ? (playerStats.totalSeconds / playerStats.turns)
+        : 0;
+    }
+
+    function renderStats() {
+      const statEntries = Object.values(state.stats);
+
+      if (!statEntries.length) {
+        els.statsGrid.innerHTML = `
+          <div class="stat-player-card">
+            <div class="stat-player-name">No stats yet</div>
+            <div class="stat-meta">Start the turn counter and complete at least one turn to begin collecting data.</div>
+          </div>
+        `;
+        return;
+      }
+
+      const cards = statEntries.map(playerStats => {
+        const historyMarkup = playerStats.durations.length
+          ? playerStats.durations.map((seconds, index) => (
+              `<span class="history-chip">#${index + 1}: ${formatTime(seconds)}</span>`
+            )).join('')
+          : '<span class="history-chip">No completed turns yet</span>';
+
+        return `
+          <div class="stat-player-card">
+            <div>
+              <div class="stat-player-name">${escapeHtml(playerStats.name)}</div>
+              <div class="stat-meta">${titleCaseSeat(playerStats.seat)} seat</div>
+            </div>
+
+            <div class="stat-list">
+              <div class="stat-row"><span>Turns taken</span><strong>${playerStats.turns}</strong></div>
+              <div class="stat-row"><span>Total time</span><strong>${formatTime(playerStats.totalSeconds)}</strong></div>
+              <div class="stat-row"><span>Average turn</span><strong>${formatAverage(playerStats.averageSeconds)}</strong></div>
+              <div class="stat-row"><span>Last turn</span><strong>${formatTime(playerStats.lastTurnSeconds)}</strong></div>
+              <div class="stat-row"><span>Longest turn</span><strong>${formatTime(playerStats.longestSeconds)}</strong></div>
+              <div class="stat-row"><span>Shortest turn</span><strong>${formatTime(playerStats.shortestSeconds ?? 0)}</strong></div>
+            </div>
+
+            <div class="turn-history">
+              <div class="stat-meta">Turn history</div>
+              <div class="history-chip-wrap">${historyMarkup}</div>
+            </div>
+          </div>
+        `;
+      }).join('');
+
+      els.statsGrid.innerHTML = cards;
+    }
+
+    function showStats() {
+      renderStats();
+      els.statsModal.classList.add('active');
+      els.statsModal.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeStats() {
+      els.statsModal.classList.remove('active');
+      els.statsModal.setAttribute('aria-hidden', 'true');
+    }
+
     function startGame() {
       if (!validateConfig()) return;
+
+      ensureAudioContext();
 
       state.totalSeconds = getTurnSeconds();
       state.remainingSeconds = state.totalSeconds;
       state.activePlayers = getActivePlayers().sort((a, b) => a.order - b.order);
       state.currentIndex = 0;
+      state.intervalId = null;
+      state.dingPlayed = false;
+      state.zeroSoundPlayed = false;
+      state.turnStartedAt = Date.now();
+      state.gameStarted = true;
+      state.stats = buildFreshStats(state.activePlayers);
 
       updatePlayView();
       els.playView.classList.add('active');
@@ -924,7 +1281,18 @@
       state.intervalId = window.setInterval(() => {
         if (state.remainingSeconds > 0) {
           state.remainingSeconds -= 1;
+
+          if (state.remainingSeconds === 10 && !state.dingPlayed) {
+            playTenSecondDing();
+            state.dingPlayed = true;
+          }
+
+          if (state.remainingSeconds === 0 && !state.zeroSoundPlayed) {
+            playZeroBuzzer();
+            state.zeroSoundPlayed = true;
+          }
         }
+
         updatePlayView();
       }, 1000);
     }
@@ -937,9 +1305,17 @@
     }
 
     function advanceTurn() {
-      if (!state.activePlayers.length) return;
+      if (!state.activePlayers.length || !state.gameStarted) return;
+
+      ensureAudioContext();
+      recordCurrentTurnStats();
+
       state.currentIndex = (state.currentIndex + 1) % state.activePlayers.length;
       state.remainingSeconds = state.totalSeconds;
+      state.turnStartedAt = Date.now();
+      state.dingPlayed = false;
+      state.zeroSoundPlayed = false;
+
       updatePlayView();
     }
 
@@ -948,16 +1324,24 @@
       els.playView.classList.remove('active');
       els.playView.setAttribute('aria-hidden', 'true');
       state.remainingSeconds = state.totalSeconds;
+      state.currentIndex = 0;
+      state.activePlayers = [];
+      state.dingPlayed = false;
+      state.zeroSoundPlayed = false;
+      state.turnStartedAt = null;
+      state.gameStarted = false;
       updatePlayView();
     }
 
     function restoreDefaults() {
       stopCountdown();
       state.players = structuredClone(defaults);
-      els.minutesInput.value = 2;
-      els.secondsInput.value = 0;
+      els.minutesInput.value = '2';
+      els.secondsInput.value = '0';
+      state.stats = {};
       persistState(true);
       renderPlayers();
+      closeStats();
       resetGame();
     }
 
@@ -987,11 +1371,11 @@
             order: ['1', '2', '3', '4'].includes(String(player.order)) ? String(player.order) : defaults[index].order
           }));
         }
-        if (Number.isFinite(saved.minutes)) {
-          els.minutesInput.value = clamp(saved.minutes, 0, 59);
+        if (Number.isFinite(saved.minutes) && minuteOptions.includes(clamp(saved.minutes, 0, 59))) {
+          els.minutesInput.value = String(clamp(saved.minutes, 0, 59));
         }
-        if (Number.isFinite(saved.seconds)) {
-          els.secondsInput.value = clamp(saved.seconds, 0, 59);
+        if (Number.isFinite(saved.seconds) && secondOptions.includes(clamp(saved.seconds, 0, 59))) {
+          els.secondsInput.value = String(clamp(saved.seconds, 0, 59));
         }
       } catch (error) {
         console.warn('Unable to load saved state', error);
@@ -999,12 +1383,24 @@
     }
 
     els.startBtn.addEventListener('click', startGame);
+    els.showStatsBtn.addEventListener('click', showStats);
     els.restoreBtn.addEventListener('click', restoreDefaults);
     els.resetBtn.addEventListener('click', resetGame);
     els.advanceBtn.addEventListener('click', advanceTurn);
-    els.minutesInput.addEventListener('input', () => { validateConfig(); persistState(); });
-    els.secondsInput.addEventListener('input', () => { validateConfig(); persistState(); });
+    els.playStatsBtn.addEventListener('click', showStats);
+    els.closeStatsBtn.addEventListener('click', closeStats);
+    els.statsModal.addEventListener('click', (event) => {
+      if (event.target === els.statsModal) closeStats();
+    });
 
+    ['pointerdown', 'touchstart', 'click'].forEach(eventName => {
+      window.addEventListener(eventName, ensureAudioContext, { passive: true, once: false });
+    });
+
+    els.minutesInput.addEventListener('change', () => { validateConfig(); persistState(); });
+    els.secondsInput.addEventListener('change', () => { validateConfig(); persistState(); });
+
+    populateTimeSelectors();
     loadPersistedState();
     renderPlayers();
 
