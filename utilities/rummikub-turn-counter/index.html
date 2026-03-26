@@ -13,17 +13,23 @@
   <style>
     :root {
       --bg: #020617;
-      --panel: rgba(15, 23, 42, 0.94);
-      --panel-2: rgba(30, 41, 59, 0.84);
+      --bg-2: #0f172a;
+      --panel: rgba(15, 23, 42, 0.84);
+      --panel-2: rgba(30, 41, 59, 0.86);
+      --panel-3: rgba(51, 65, 85, 0.55);
       --text: #f8fafc;
       --muted: #94a3b8;
+      --muted-2: #cbd5e1;
+      --line: rgba(255,255,255,0.10);
+      --line-2: rgba(255,255,255,0.06);
       --accent: #38bdf8;
       --accent-2: #8b5cf6;
+      --accent-soft: rgba(56,189,248,0.18);
       --danger: #ef4444;
-      --warning: #f59e0b;
       --success: #22c55e;
-      --radius: 22px;
-      --shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+      --warning: #f59e0b;
+      --radius: 24px;
+      --shadow: 0 18px 50px rgba(0,0,0,0.34);
     }
     * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
     html, body { margin: 0; min-height: 100%; background: var(--bg); color: var(--text); }
@@ -32,22 +38,23 @@
       user-select: none;
       overscroll-behavior: none;
       background:
-        radial-gradient(circle at 15% 10%, rgba(56,189,248,0.18), transparent 24%),
-        radial-gradient(circle at 85% 20%, rgba(139,92,246,0.18), transparent 22%),
-        linear-gradient(180deg, #020617 0%, #0f172a 100%);
+        radial-gradient(circle at 15% 8%, rgba(56,189,248,0.22), transparent 26%),
+        radial-gradient(circle at 84% 14%, rgba(139,92,246,0.18), transparent 24%),
+        linear-gradient(180deg, #020617 0%, #0f172a 58%, #111827 100%);
     }
+    button, input, select { font: inherit; }
     .app {
       min-height: 100dvh;
-      padding: max(14px, env(safe-area-inset-top)) 14px max(14px, env(safe-area-inset-bottom)) 14px;
+      padding: max(14px, env(safe-area-inset-top)) 14px max(96px, calc(18px + env(safe-area-inset-bottom))) 14px;
+      width: min(100%, 1120px);
+      margin: 0 auto;
       display: grid;
       align-content: start;
       gap: 14px;
-      width: min(100%, 980px);
-      margin: 0 auto;
     }
     .panel {
       background: var(--panel);
-      border: 1px solid rgba(255,255,255,0.08);
+      border: 1px solid var(--line);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
       backdrop-filter: blur(18px);
@@ -55,33 +62,41 @@
     .header {
       padding: 18px;
       display: grid;
-      gap: 10px;
+      gap: 12px;
     }
     .header-top {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 12px;
+      flex-wrap: wrap;
     }
-    .back-link {
-      color: #cbd5e1;
+    .back-link, .pill {
+      min-height: 44px;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border-radius: 14px;
+      padding: 10px 14px;
+      background: rgba(255,255,255,0.06);
+      border: 1px solid var(--line);
+      color: var(--text);
       text-decoration: none;
-      font-size: 0.92rem;
-      background: rgba(255,255,255,0.05);
-      padding: 9px 12px;
-      border-radius: 12px;
-      border: 1px solid rgba(255,255,255,0.08);
+      font-weight: 700;
     }
+    .pill { color: var(--muted-2); }
     h1 {
       margin: 0;
-      font-size: clamp(1.5rem, 4.6vw, 2.4rem);
-      letter-spacing: -0.03em;
+      font-size: clamp(1.7rem, 5vw, 2.6rem);
+      letter-spacing: -0.04em;
+      line-height: 1.02;
     }
     .sub {
-      color: var(--muted);
-      line-height: 1.5;
       margin: 0;
-      font-size: 0.96rem;
+      color: var(--muted);
+      line-height: 1.55;
+      font-size: 0.98rem;
+      max-width: 72ch;
     }
     .config {
       display: grid;
@@ -90,12 +105,24 @@
     .section {
       padding: 16px;
       display: grid;
-      gap: 14px;
+      gap: 16px;
+    }
+    .section-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: end;
+      gap: 12px;
+      flex-wrap: wrap;
     }
     .section-title {
       margin: 0;
-      font-size: 1rem;
+      font-size: 1.03rem;
       letter-spacing: -0.02em;
+    }
+    .section-note {
+      color: var(--muted);
+      font-size: 0.9rem;
+      line-height: 1.4;
     }
     .time-grid {
       display: grid;
@@ -106,31 +133,36 @@
       display: grid;
       gap: 8px;
       color: #dbeafe;
-      font-weight: 600;
+      font-weight: 700;
       font-size: 0.92rem;
     }
     input[type="text"], input[type="number"], select {
       width: 100%;
-      min-height: 52px;
-      border-radius: 14px;
+      min-height: 56px;
+      border-radius: 16px;
       border: 1px solid rgba(255,255,255,0.12);
       background: rgba(255,255,255,0.06);
       color: white;
-      padding: 0 14px;
+      padding: 0 16px;
       font-size: 1rem;
       appearance: none;
     }
+    input::placeholder { color: #94a3b8; }
     .players {
       display: grid;
       gap: 12px;
     }
     .player-card {
       padding: 14px;
-      border-radius: 18px;
-      background: var(--panel-2);
-      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px;
+      background: linear-gradient(180deg, rgba(30,41,59,0.86), rgba(15,23,42,0.92));
+      border: 1px solid var(--line);
       display: grid;
       gap: 12px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
+    }
+    .player-card[data-enabled="false"] {
+      opacity: 0.82;
     }
     .player-head {
       display: flex;
@@ -138,16 +170,26 @@
       justify-content: space-between;
       gap: 12px;
     }
+    .player-title-wrap {
+      display: grid;
+      gap: 4px;
+    }
     .player-title {
       font-size: 1rem;
-      font-weight: 700;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+    .player-meta {
+      font-size: 0.84rem;
+      color: var(--muted);
     }
     .toggle {
       position: relative;
-      width: 60px;
-      height: 34px;
+      width: 62px;
+      height: 36px;
       display: inline-flex;
       align-items: center;
+      flex: 0 0 auto;
     }
     .toggle input {
       position: absolute;
@@ -157,109 +199,210 @@
     .toggle .track {
       width: 100%;
       height: 100%;
-      background: rgba(255,255,255,0.16);
+      background: rgba(255,255,255,0.14);
       border-radius: 999px;
-      border: 1px solid rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.10);
       transition: .2s ease;
     }
     .toggle .thumb {
       position: absolute;
       left: 4px;
-      width: 26px;
-      height: 26px;
+      width: 28px;
+      height: 28px;
       border-radius: 50%;
       background: white;
       transition: .2s ease;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+      box-shadow: 0 4px 10px rgba(0,0,0,0.28);
     }
     .toggle input:checked + .track {
-      background: rgba(34,197,94,0.38);
-      border-color: rgba(34,197,94,0.5);
+      background: rgba(34,197,94,0.34);
+      border-color: rgba(34,197,94,0.44);
     }
     .toggle input:checked ~ .thumb {
       transform: translateX(26px);
     }
     .player-grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: minmax(0,1fr) 150px;
       gap: 12px;
+      align-items: start;
+    }
+    .seat-controls {
+      display: grid;
+      gap: 10px;
+    }
+    .seat-picker-label {
+      font-size: 0.9rem;
+      color: #dbeafe;
+      font-weight: 700;
+    }
+    .seat-picker {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      grid-template-rows: repeat(3, minmax(58px, auto));
+      gap: 8px;
+      align-items: stretch;
+    }
+    .seat-button {
+      min-height: 58px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.05);
+      color: #e2e8f0;
+      font-weight: 800;
+      display: grid;
+      place-items: center;
+      padding: 10px;
+    }
+    .seat-button[aria-pressed="true"] {
+      background: linear-gradient(135deg, rgba(56,189,248,0.24), rgba(139,92,246,0.22));
+      border-color: rgba(56,189,248,0.46);
+      color: white;
+      box-shadow: 0 10px 22px rgba(56,189,248,0.18);
+    }
+    .seat-button[disabled] {
+      opacity: 0.42;
+      cursor: not-allowed;
+    }
+    .seat-top-btn { grid-column: 2; grid-row: 1; }
+    .seat-left-btn { grid-column: 1; grid-row: 2; }
+    .seat-center-btn {
+      grid-column: 2;
+      grid-row: 2;
+      border-style: dashed;
+      color: var(--muted);
+      background: rgba(255,255,255,0.02);
+      pointer-events: none;
+      font-weight: 700;
+      font-size: 0.88rem;
+      text-align: center;
+      line-height: 1.2;
+    }
+    .seat-right-btn { grid-column: 3; grid-row: 2; }
+    .seat-bottom-btn { grid-column: 2; grid-row: 3; }
+    .turn-quick {
+      display: grid;
+      grid-template-columns: repeat(4, minmax(0, 1fr));
+      gap: 8px;
+    }
+    .turn-chip {
+      min-height: 48px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.10);
+      background: rgba(255,255,255,0.05);
+      color: #e2e8f0;
+      font-weight: 800;
+    }
+    .turn-chip.active {
+      background: rgba(255,255,255,0.14);
+      border-color: rgba(255,255,255,0.20);
+      color: white;
     }
     .preview-shell {
       display: grid;
-      gap: 12px;
+      gap: 14px;
+      align-content: start;
     }
     .preview-board {
       aspect-ratio: 1 / 1;
-      width: min(100%, 360px);
+      width: min(100%, 430px);
       margin: 0 auto;
       position: relative;
-      border-radius: 24px;
-      background: linear-gradient(180deg, rgba(15,23,42,0.96), rgba(30,41,59,0.96));
-      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 28px;
+      background:
+        radial-gradient(circle at 50% 50%, rgba(56,189,248,0.10), transparent 30%),
+        linear-gradient(180deg, rgba(15,23,42,0.96), rgba(30,41,59,0.96));
+      border: 1px solid rgba(255,255,255,0.10);
       overflow: hidden;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
     }
     .preview-center {
       position: absolute;
-      inset: 28%;
-      border-radius: 28px;
+      inset: 29%;
+      border-radius: 24px;
       background: rgba(255,255,255,0.04);
       display: grid;
       place-items: center;
       text-align: center;
       padding: 16px;
       color: #cbd5e1;
-      border: 1px dashed rgba(255,255,255,0.1);
-      font-size: 0.92rem;
+      border: 1px dashed rgba(255,255,255,0.10);
+      font-size: 0.9rem;
+      line-height: 1.35;
     }
     .seat-chip {
       position: absolute;
-      min-width: 110px;
-      min-height: 52px;
-      padding: 8px 12px;
-      border-radius: 16px;
-      background: rgba(56,189,248,0.14);
-      border: 1px solid rgba(56,189,248,0.25);
+      min-width: 120px;
+      min-height: 58px;
+      max-width: 130px;
+      padding: 9px 12px;
+      border-radius: 18px;
+      background: linear-gradient(180deg, rgba(56,189,248,0.18), rgba(56,189,248,0.10));
+      border: 1px solid rgba(56,189,248,0.28);
       display: grid;
       place-items: center;
       text-align: center;
-      font-weight: 700;
-      line-height: 1.2;
+      font-weight: 800;
+      line-height: 1.18;
       color: #e0f2fe;
+      box-shadow: 0 12px 24px rgba(2,6,23,0.22);
+    }
+    .seat-chip small {
+      font-size: 0.78rem;
+      color: #e2e8f0;
+      font-weight: 700;
     }
     .seat-top { top: 12px; left: 50%; transform: translateX(-50%); }
     .seat-right { right: 12px; top: 50%; transform: translateY(-50%); }
     .seat-bottom { bottom: 12px; left: 50%; transform: translateX(-50%); }
     .seat-left { left: 12px; top: 50%; transform: translateY(-50%); }
-    .hint {
+    .legend {
+      display: grid;
+      gap: 8px;
       color: var(--muted);
-      font-size: 0.88rem;
+      font-size: 0.9rem;
       line-height: 1.45;
     }
+    .legend strong { color: var(--muted-2); }
+    .status {
+      min-height: 24px;
+      color: #fde68a;
+      font-size: 0.92rem;
+      font-weight: 800;
+    }
     .actions {
+      position: sticky;
+      bottom: max(10px, env(safe-area-inset-bottom));
       display: flex;
       gap: 12px;
       flex-wrap: wrap;
+      padding: 12px;
+      background: rgba(2,6,23,0.72);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 20px;
+      backdrop-filter: blur(16px);
     }
     button {
       appearance: none;
       border: 0;
-      border-radius: 16px;
-      min-height: 56px;
+      border-radius: 18px;
+      min-height: 58px;
       padding: 14px 18px;
       font-size: 1rem;
-      font-weight: 800;
+      font-weight: 900;
       cursor: pointer;
+      letter-spacing: -0.02em;
     }
     .primary {
       background: linear-gradient(135deg, var(--accent), var(--accent-2));
       color: white;
       flex: 1 1 240px;
-      box-shadow: 0 16px 36px rgba(56,189,248,0.2);
+      box-shadow: 0 16px 36px rgba(56,189,248,0.20);
     }
     .secondary {
       background: rgba(255,255,255,0.06);
       color: white;
-      border: 1px solid rgba(255,255,255,0.1);
+      border: 1px solid rgba(255,255,255,0.10);
       flex: 1 1 160px;
     }
     .danger {
@@ -267,13 +410,10 @@
       color: #fecaca;
       border: 1px solid rgba(239,68,68,0.28);
     }
-    .status {
-      min-height: 24px;
-      color: #fde68a;
-      font-size: 0.9rem;
-      font-weight: 700;
+    button:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
     }
-    .hidden { display: none !important; }
 
     .play {
       position: fixed;
@@ -294,18 +434,7 @@
       align-items: center;
       gap: 10px;
       z-index: 3;
-    }
-    .pill {
-      min-height: 46px;
-      border-radius: 14px;
-      background: rgba(255,255,255,0.08);
-      border: 1px solid rgba(255,255,255,0.1);
-      color: white;
-      padding: 10px 14px;
-      display: inline-flex;
-      align-items: center;
-      font-weight: 700;
-      gap: 8px;
+      flex-wrap: wrap;
     }
     .play-stage {
       flex: 1;
@@ -315,8 +444,8 @@
       position: relative;
     }
     .orientation {
-      width: min(92vw, 560px);
-      height: min(78dvh, 700px);
+      width: min(92vw, 620px);
+      height: min(78dvh, 760px);
       display: grid;
       place-items: center;
       transition: transform 0.35s ease;
@@ -325,8 +454,8 @@
     .timer-button {
       width: 100%;
       height: 100%;
-      border-radius: 32px;
-      background: linear-gradient(180deg, rgba(15,23,42,0.94), rgba(30,41,59,0.96));
+      border-radius: 34px;
+      background: linear-gradient(180deg, rgba(15,23,42,0.94), rgba(30,41,59,0.97));
       border: 1px solid rgba(255,255,255,0.08);
       box-shadow: var(--shadow);
       display: grid;
@@ -350,15 +479,24 @@
       position: relative;
       z-index: 1;
       text-align: center;
-      font-size: clamp(1.5rem, 5vw, 2.4rem);
+      font-size: clamp(1.6rem, 5vw, 2.6rem);
       font-weight: 900;
       letter-spacing: -0.04em;
       padding: 0 8px;
     }
+    .seat-name {
+      position: relative;
+      z-index: 1;
+      color: var(--muted-2);
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      font-size: 0.78rem;
+    }
     .timer-value {
       position: relative;
       z-index: 1;
-      font-size: clamp(4rem, 17vw, 7rem);
+      font-size: clamp(4rem, 17vw, 7.4rem);
       line-height: 0.9;
       font-weight: 900;
       letter-spacing: -0.06em;
@@ -370,22 +508,28 @@
       text-align: center;
       color: #cbd5e1;
       line-height: 1.45;
-      max-width: 24ch;
+      max-width: 26ch;
     }
-    .expired {
-      color: #fca5a5;
-    }
-    @media (min-width: 900px) {
+    .expired { color: #fca5a5; }
+
+    @media (min-width: 940px) {
       .config {
-        grid-template-columns: 1.2fr 0.8fr;
+        grid-template-columns: minmax(0, 1.15fr) minmax(320px, 0.85fr);
         align-items: start;
       }
     }
+    @media (max-width: 720px) {
+      .player-grid { grid-template-columns: 1fr; }
+      .seat-chip { min-width: 104px; max-width: 116px; }
+    }
     @media (max-width: 520px) {
-      .time-grid, .player-grid { grid-template-columns: 1fr; }
-      .play-topbar { flex-wrap: wrap; }
-      .orientation { width: 94vw; height: min(76dvh, 620px); }
-      .current-player { font-size: 1.35rem; }
+      .app { padding-left: 10px; padding-right: 10px; }
+      .time-grid { grid-template-columns: 1fr; }
+      .turn-quick { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+      .actions { position: sticky; }
+      .orientation { width: 94vw; height: min(76dvh, 640px); }
+      .current-player { font-size: 1.4rem; }
+      .preview-center { inset: 31%; }
     }
   </style>
 </head>
@@ -397,12 +541,18 @@
         <div class="pill">Rummikub</div>
       </div>
       <h1>Turn Counter</h1>
-      <p class="sub">Set a turn length, choose up to four players, assign seat positions and play order, then tap the large timer to pass the turn and restart the countdown.</p>
+      <p class="sub">Set a turn length, choose up to four players, pick exactly where each player is sitting, define turn order, then tap the fullscreen timer to pass the turn and restart the countdown.</p>
     </section>
 
     <section class="config">
       <section class="panel section">
-        <h2 class="section-title">Turn settings</h2>
+        <div class="section-head">
+          <div>
+            <h2 class="section-title">Turn setup</h2>
+            <div class="section-note">Mobile and iPad friendly. Seat selection can be done directly from the table position buttons.</div>
+          </div>
+        </div>
+
         <div class="time-grid">
           <label>
             Minutes per turn
@@ -414,7 +564,13 @@
           </label>
         </div>
 
-        <h2 class="section-title">Players</h2>
+        <div class="section-head">
+          <div>
+            <h2 class="section-title">Players</h2>
+            <div class="section-note">Each active player needs one unique seat and one unique turn position.</div>
+          </div>
+        </div>
+
         <div class="players" id="playersContainer"></div>
 
         <div class="status" id="statusText"></div>
@@ -426,11 +582,19 @@
       </section>
 
       <section class="panel section preview-shell">
-        <h2 class="section-title">Table preview</h2>
-        <div class="preview-board" id="previewBoard">
-          <div class="preview-center">Seat positions shown around the table.<br>Turn order is listed on each active player.</div>
+        <div class="section-head">
+          <div>
+            <h2 class="section-title">Table preview</h2>
+            <div class="section-note">The fullscreen timer rotates to face the next selected seat.</div>
+          </div>
         </div>
-        <div class="hint">Each active player needs a unique seat and a unique turn order. The fullscreen timer rotates to face the next seat each time you tap it.</div>
+        <div class="preview-board" id="previewBoard">
+          <div class="preview-center">Seat positions shown around the table.<br>Turn order appears on each active player.</div>
+        </div>
+        <div class="legend">
+          <div><strong>Seat selection:</strong> Use the top, left, right, and bottom buttons inside each player card.</div>
+          <div><strong>Turn flow:</strong> The timer can be tapped early or after time runs out to pass to the next player.</div>
+        </div>
       </section>
     </section>
   </main>
@@ -445,6 +609,7 @@
       <div class="orientation" id="orientationStage">
         <button class="timer-button" id="advanceBtn" type="button" aria-label="Tap to pass turn">
           <div class="current-player" id="currentPlayerName">Player</div>
+          <div class="seat-name" id="currentSeatName">Bottom seat</div>
           <div class="timer-value" id="timerValue">2:00</div>
           <div class="timer-caption" id="timerCaption">Tap anywhere on the timer when the turn ends to face the next player and restart the countdown.</div>
         </button>
@@ -496,6 +661,7 @@
       advanceBtn: document.getElementById('advanceBtn'),
       timerValue: document.getElementById('timerValue'),
       currentPlayerName: document.getElementById('currentPlayerName'),
+      currentSeatName: document.getElementById('currentSeatName'),
       turnInfo: document.getElementById('turnInfo'),
       timerCaption: document.getElementById('timerCaption'),
       orientationStage: document.getElementById('orientationStage')
@@ -508,11 +674,26 @@
       return `${mins}:${String(secs).padStart(2, '0')}`;
     }
 
+    function seatPickerMarkup(index, selectedSeat) {
+      return `
+        <div class="seat-picker" role="group" aria-label="Seat selection for player ${index + 1}">
+          <button type="button" class="seat-button seat-top-btn" data-seat-button="true" data-index="${index}" data-seat-value="top" aria-pressed="${selectedSeat === 'top'}">Top</button>
+          <button type="button" class="seat-button seat-left-btn" data-seat-button="true" data-index="${index}" data-seat-value="left" aria-pressed="${selectedSeat === 'left'}">Left</button>
+          <div class="seat-button seat-center-btn" aria-hidden="true">Table</div>
+          <button type="button" class="seat-button seat-right-btn" data-seat-button="true" data-index="${index}" data-seat-value="right" aria-pressed="${selectedSeat === 'right'}">Right</button>
+          <button type="button" class="seat-button seat-bottom-btn" data-seat-button="true" data-index="${index}" data-seat-value="bottom" aria-pressed="${selectedSeat === 'bottom'}">Bottom</button>
+        </div>
+      `;
+    }
+
     function playerCardTemplate(player, index) {
       return `
-        <div class="player-card">
+        <div class="player-card" data-enabled="${player.enabled}">
           <div class="player-head">
-            <div class="player-title">Player slot ${index + 1}</div>
+            <div class="player-title-wrap">
+              <div class="player-title">Player slot ${index + 1}</div>
+              <div class="player-meta">${player.enabled ? 'Active in this round' : 'Disabled'}</div>
+            </div>
             <label class="toggle" aria-label="Enable player ${index + 1}">
               <input type="checkbox" data-field="enabled" data-index="${index}" ${player.enabled ? 'checked' : ''}>
               <span class="track"></span>
@@ -526,22 +707,31 @@
           </label>
 
           <div class="player-grid">
-            <label>
-              Seat
-              <select data-field="seat" data-index="${index}">
-                ${seatOptions.map(option => `<option value="${option.value}" ${player.seat === option.value ? 'selected' : ''}>${option.label}</option>`).join('')}
-              </select>
-            </label>
+            <div class="seat-controls">
+              <div class="seat-picker-label">Where is this player sitting?</div>
+              ${seatPickerMarkup(index, player.seat)}
+              <label>
+                Seat
+                <select data-field="seat" data-index="${index}">
+                  ${seatOptions.map(option => `<option value="${option.value}" ${player.seat === option.value ? 'selected' : ''}>${option.label}</option>`).join('')}
+                </select>
+              </label>
+            </div>
 
-            <label>
-              Turn order
-              <select data-field="order" data-index="${index}">
-                <option value="1" ${player.order === '1' ? 'selected' : ''}>1st</option>
-                <option value="2" ${player.order === '2' ? 'selected' : ''}>2nd</option>
-                <option value="3" ${player.order === '3' ? 'selected' : ''}>3rd</option>
-                <option value="4" ${player.order === '4' ? 'selected' : ''}>4th</option>
-              </select>
-            </label>
+            <div class="seat-controls">
+              <label>
+                Turn order
+                <select data-field="order" data-index="${index}">
+                  <option value="1" ${player.order === '1' ? 'selected' : ''}>1st</option>
+                  <option value="2" ${player.order === '2' ? 'selected' : ''}>2nd</option>
+                  <option value="3" ${player.order === '3' ? 'selected' : ''}>3rd</option>
+                  <option value="4" ${player.order === '4' ? 'selected' : ''}>4th</option>
+                </select>
+              </label>
+              <div class="turn-quick" role="group" aria-label="Quick turn order selection for player ${index + 1}">
+                ${[1,2,3,4].map(num => `<button type="button" class="turn-chip ${String(num) === String(player.order) ? 'active' : ''}" data-order-button="true" data-index="${index}" data-order-value="${num}">${num}</button>`).join('')}
+              </div>
+            </div>
           </div>
         </div>
       `;
@@ -568,6 +758,26 @@
         control.addEventListener('input', handleConfigChange);
         control.addEventListener('change', handleConfigChange);
       });
+
+      els.playersContainer.querySelectorAll('[data-seat-button="true"]').forEach(button => {
+        button.addEventListener('click', () => {
+          const index = Number(button.dataset.index);
+          const seat = button.dataset.seatValue;
+          state.players[index].seat = seat;
+          renderPlayers();
+          persistState();
+        });
+      });
+
+      els.playersContainer.querySelectorAll('[data-order-button="true"]').forEach(button => {
+        button.addEventListener('click', () => {
+          const index = Number(button.dataset.index);
+          const order = button.dataset.orderValue;
+          state.players[index].order = String(order);
+          renderPlayers();
+          persistState();
+        });
+      });
     }
 
     function handleConfigChange(event) {
@@ -587,20 +797,16 @@
 
     function renderPreview() {
       const activePlayers = getActivePlayers({ allowInvalid: true });
-      const seats = {
-        top: null, right: null, bottom: null, left: null
-      };
-      activePlayers.forEach(player => {
-        seats[player.seat] = player;
-      });
+      const seats = { top: null, right: null, bottom: null, left: null };
+      activePlayers.forEach(player => { seats[player.seat] = player; });
 
       const seatMarkup = Object.entries(seats).map(([seat, player]) => {
         if (!player) return '';
         const orderText = `${ordinal(player.order)} turn`;
-        return `<div class="seat-chip seat-${seat}">${escapeHtml(player.name || 'Player')}<br><span style="font-weight:600; font-size:0.82rem; opacity:0.92">${orderText}</span></div>`;
+        return `<div class="seat-chip seat-${seat}">${escapeHtml(player.name || 'Player')}<br><small>${orderText}</small></div>`;
       }).join('');
 
-      els.previewBoard.innerHTML = `<div class="preview-center">Seat positions shown around the table.<br>Turn order is listed on each active player.</div>${seatMarkup}`;
+      els.previewBoard.innerHTML = `<div class="preview-center">Seat positions shown around the table.<br>Turn order appears on each active player.</div>${seatMarkup}`;
     }
 
     function ordinal(value) {
@@ -609,6 +815,10 @@
       if (n === 2) return '2nd';
       if (n === 3) return '3rd';
       return `${n}th`;
+    }
+
+    function titleCaseSeat(seat) {
+      return String(seat || '').charAt(0).toUpperCase() + String(seat || '').slice(1);
     }
 
     function getTurnSeconds() {
@@ -630,10 +840,7 @@
           order: Number(player.order)
         }));
 
-      if (allowInvalid) {
-        return players;
-      }
-
+      if (allowInvalid) return players;
       return players.sort((a, b) => a.order - b.order);
     }
 
@@ -701,6 +908,7 @@
       if (!currentPlayer) return;
 
       els.currentPlayerName.textContent = currentPlayer.name;
+      els.currentSeatName.textContent = `${titleCaseSeat(currentPlayer.seat)} seat`;
       els.turnInfo.textContent = `Turn ${state.currentIndex + 1} of ${state.activePlayers.length}`;
       els.timerValue.textContent = formatTime(state.remainingSeconds);
       els.timerValue.classList.toggle('expired', state.remainingSeconds === 0);
@@ -716,10 +924,8 @@
       state.intervalId = window.setInterval(() => {
         if (state.remainingSeconds > 0) {
           state.remainingSeconds -= 1;
-          updatePlayView();
-        } else {
-          updatePlayView();
         }
+        updatePlayView();
       }, 1000);
     }
 
