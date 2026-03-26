@@ -1,0 +1,812 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#0f172a">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Rummikub Timer">
+  <title>Rummikub Turn Counter</title>
+  <link rel="manifest" href="../../manifest.webmanifest">
+  <link rel="apple-touch-icon" href="../../assets/icons/apple-touch-icon.png">
+  <style>
+    :root {
+      --bg: #020617;
+      --panel: rgba(15, 23, 42, 0.94);
+      --panel-2: rgba(30, 41, 59, 0.84);
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --accent: #38bdf8;
+      --accent-2: #8b5cf6;
+      --danger: #ef4444;
+      --warning: #f59e0b;
+      --success: #22c55e;
+      --radius: 22px;
+      --shadow: 0 24px 60px rgba(0, 0, 0, 0.35);
+    }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    html, body { margin: 0; min-height: 100%; background: var(--bg); color: var(--text); }
+    body {
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      user-select: none;
+      overscroll-behavior: none;
+      background:
+        radial-gradient(circle at 15% 10%, rgba(56,189,248,0.18), transparent 24%),
+        radial-gradient(circle at 85% 20%, rgba(139,92,246,0.18), transparent 22%),
+        linear-gradient(180deg, #020617 0%, #0f172a 100%);
+    }
+    .app {
+      min-height: 100dvh;
+      padding: max(14px, env(safe-area-inset-top)) 14px max(14px, env(safe-area-inset-bottom)) 14px;
+      display: grid;
+      align-content: start;
+      gap: 14px;
+      width: min(100%, 980px);
+      margin: 0 auto;
+    }
+    .panel {
+      background: var(--panel);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(18px);
+    }
+    .header {
+      padding: 18px;
+      display: grid;
+      gap: 10px;
+    }
+    .header-top {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .back-link {
+      color: #cbd5e1;
+      text-decoration: none;
+      font-size: 0.92rem;
+      background: rgba(255,255,255,0.05);
+      padding: 9px 12px;
+      border-radius: 12px;
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+    h1 {
+      margin: 0;
+      font-size: clamp(1.5rem, 4.6vw, 2.4rem);
+      letter-spacing: -0.03em;
+    }
+    .sub {
+      color: var(--muted);
+      line-height: 1.5;
+      margin: 0;
+      font-size: 0.96rem;
+    }
+    .config {
+      display: grid;
+      gap: 14px;
+    }
+    .section {
+      padding: 16px;
+      display: grid;
+      gap: 14px;
+    }
+    .section-title {
+      margin: 0;
+      font-size: 1rem;
+      letter-spacing: -0.02em;
+    }
+    .time-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+    }
+    label {
+      display: grid;
+      gap: 8px;
+      color: #dbeafe;
+      font-weight: 600;
+      font-size: 0.92rem;
+    }
+    input[type="text"], input[type="number"], select {
+      width: 100%;
+      min-height: 52px;
+      border-radius: 14px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.06);
+      color: white;
+      padding: 0 14px;
+      font-size: 1rem;
+      appearance: none;
+    }
+    .players {
+      display: grid;
+      gap: 12px;
+    }
+    .player-card {
+      padding: 14px;
+      border-radius: 18px;
+      background: var(--panel-2);
+      border: 1px solid rgba(255,255,255,0.08);
+      display: grid;
+      gap: 12px;
+    }
+    .player-head {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .player-title {
+      font-size: 1rem;
+      font-weight: 700;
+    }
+    .toggle {
+      position: relative;
+      width: 60px;
+      height: 34px;
+      display: inline-flex;
+      align-items: center;
+    }
+    .toggle input {
+      position: absolute;
+      opacity: 0;
+      inset: 0;
+    }
+    .toggle .track {
+      width: 100%;
+      height: 100%;
+      background: rgba(255,255,255,0.16);
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.1);
+      transition: .2s ease;
+    }
+    .toggle .thumb {
+      position: absolute;
+      left: 4px;
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      background: white;
+      transition: .2s ease;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+    }
+    .toggle input:checked + .track {
+      background: rgba(34,197,94,0.38);
+      border-color: rgba(34,197,94,0.5);
+    }
+    .toggle input:checked ~ .thumb {
+      transform: translateX(26px);
+    }
+    .player-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .preview-shell {
+      display: grid;
+      gap: 12px;
+    }
+    .preview-board {
+      aspect-ratio: 1 / 1;
+      width: min(100%, 360px);
+      margin: 0 auto;
+      position: relative;
+      border-radius: 24px;
+      background: linear-gradient(180deg, rgba(15,23,42,0.96), rgba(30,41,59,0.96));
+      border: 1px solid rgba(255,255,255,0.1);
+      overflow: hidden;
+    }
+    .preview-center {
+      position: absolute;
+      inset: 28%;
+      border-radius: 28px;
+      background: rgba(255,255,255,0.04);
+      display: grid;
+      place-items: center;
+      text-align: center;
+      padding: 16px;
+      color: #cbd5e1;
+      border: 1px dashed rgba(255,255,255,0.1);
+      font-size: 0.92rem;
+    }
+    .seat-chip {
+      position: absolute;
+      min-width: 110px;
+      min-height: 52px;
+      padding: 8px 12px;
+      border-radius: 16px;
+      background: rgba(56,189,248,0.14);
+      border: 1px solid rgba(56,189,248,0.25);
+      display: grid;
+      place-items: center;
+      text-align: center;
+      font-weight: 700;
+      line-height: 1.2;
+      color: #e0f2fe;
+    }
+    .seat-top { top: 12px; left: 50%; transform: translateX(-50%); }
+    .seat-right { right: 12px; top: 50%; transform: translateY(-50%); }
+    .seat-bottom { bottom: 12px; left: 50%; transform: translateX(-50%); }
+    .seat-left { left: 12px; top: 50%; transform: translateY(-50%); }
+    .hint {
+      color: var(--muted);
+      font-size: 0.88rem;
+      line-height: 1.45;
+    }
+    .actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    button {
+      appearance: none;
+      border: 0;
+      border-radius: 16px;
+      min-height: 56px;
+      padding: 14px 18px;
+      font-size: 1rem;
+      font-weight: 800;
+      cursor: pointer;
+    }
+    .primary {
+      background: linear-gradient(135deg, var(--accent), var(--accent-2));
+      color: white;
+      flex: 1 1 240px;
+      box-shadow: 0 16px 36px rgba(56,189,248,0.2);
+    }
+    .secondary {
+      background: rgba(255,255,255,0.06);
+      color: white;
+      border: 1px solid rgba(255,255,255,0.1);
+      flex: 1 1 160px;
+    }
+    .danger {
+      background: rgba(239,68,68,0.15);
+      color: #fecaca;
+      border: 1px solid rgba(239,68,68,0.28);
+    }
+    .status {
+      min-height: 24px;
+      color: #fde68a;
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+    .hidden { display: none !important; }
+
+    .play {
+      position: fixed;
+      inset: 0;
+      z-index: 30;
+      background:
+        radial-gradient(circle at 50% 15%, rgba(56,189,248,0.16), transparent 24%),
+        radial-gradient(circle at 50% 85%, rgba(139,92,246,0.16), transparent 24%),
+        linear-gradient(180deg, #020617 0%, #0f172a 100%);
+      display: none;
+      flex-direction: column;
+      padding: max(12px, env(safe-area-inset-top)) 12px max(12px, env(safe-area-inset-bottom)) 12px;
+    }
+    .play.active { display: flex; }
+    .play-topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      z-index: 3;
+    }
+    .pill {
+      min-height: 46px;
+      border-radius: 14px;
+      background: rgba(255,255,255,0.08);
+      border: 1px solid rgba(255,255,255,0.1);
+      color: white;
+      padding: 10px 14px;
+      display: inline-flex;
+      align-items: center;
+      font-weight: 700;
+      gap: 8px;
+    }
+    .play-stage {
+      flex: 1;
+      display: grid;
+      place-items: center;
+      overflow: hidden;
+      position: relative;
+    }
+    .orientation {
+      width: min(92vw, 560px);
+      height: min(78dvh, 700px);
+      display: grid;
+      place-items: center;
+      transition: transform 0.35s ease;
+      will-change: transform;
+    }
+    .timer-button {
+      width: 100%;
+      height: 100%;
+      border-radius: 32px;
+      background: linear-gradient(180deg, rgba(15,23,42,0.94), rgba(30,41,59,0.96));
+      border: 1px solid rgba(255,255,255,0.08);
+      box-shadow: var(--shadow);
+      display: grid;
+      align-content: center;
+      justify-items: center;
+      gap: 14px;
+      padding: 28px 18px;
+      position: relative;
+      overflow: hidden;
+    }
+    .timer-button::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background:
+        radial-gradient(circle at top, rgba(56,189,248,0.18), transparent 28%),
+        radial-gradient(circle at bottom, rgba(139,92,246,0.14), transparent 24%);
+      pointer-events: none;
+    }
+    .current-player {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      font-size: clamp(1.5rem, 5vw, 2.4rem);
+      font-weight: 900;
+      letter-spacing: -0.04em;
+      padding: 0 8px;
+    }
+    .timer-value {
+      position: relative;
+      z-index: 1;
+      font-size: clamp(4rem, 17vw, 7rem);
+      line-height: 0.9;
+      font-weight: 900;
+      letter-spacing: -0.06em;
+      font-variant-numeric: tabular-nums;
+    }
+    .timer-caption {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      color: #cbd5e1;
+      line-height: 1.45;
+      max-width: 24ch;
+    }
+    .expired {
+      color: #fca5a5;
+    }
+    @media (min-width: 900px) {
+      .config {
+        grid-template-columns: 1.2fr 0.8fr;
+        align-items: start;
+      }
+    }
+    @media (max-width: 520px) {
+      .time-grid, .player-grid { grid-template-columns: 1fr; }
+      .play-topbar { flex-wrap: wrap; }
+      .orientation { width: 94vw; height: min(76dvh, 620px); }
+      .current-player { font-size: 1.35rem; }
+    }
+  </style>
+</head>
+<body>
+  <main class="app" id="appRoot">
+    <section class="panel header">
+      <div class="header-top">
+        <a class="back-link" href="../../">← Utilities</a>
+        <div class="pill">Rummikub</div>
+      </div>
+      <h1>Turn Counter</h1>
+      <p class="sub">Set a turn length, choose up to four players, assign seat positions and play order, then tap the large timer to pass the turn and restart the countdown.</p>
+    </section>
+
+    <section class="config">
+      <section class="panel section">
+        <h2 class="section-title">Turn settings</h2>
+        <div class="time-grid">
+          <label>
+            Minutes per turn
+            <input id="minutesInput" type="number" min="0" max="59" inputmode="numeric" value="2">
+          </label>
+          <label>
+            Seconds per turn
+            <input id="secondsInput" type="number" min="0" max="59" inputmode="numeric" value="0">
+          </label>
+        </div>
+
+        <h2 class="section-title">Players</h2>
+        <div class="players" id="playersContainer"></div>
+
+        <div class="status" id="statusText"></div>
+
+        <div class="actions">
+          <button class="primary" id="startBtn">Start turn counter</button>
+          <button class="secondary" id="restoreBtn" type="button">Restore defaults</button>
+        </div>
+      </section>
+
+      <section class="panel section preview-shell">
+        <h2 class="section-title">Table preview</h2>
+        <div class="preview-board" id="previewBoard">
+          <div class="preview-center">Seat positions shown around the table.<br>Turn order is listed on each active player.</div>
+        </div>
+        <div class="hint">Each active player needs a unique seat and a unique turn order. The fullscreen timer rotates to face the next seat each time you tap it.</div>
+      </section>
+    </section>
+  </main>
+
+  <section class="play" id="playView" aria-hidden="true">
+    <div class="play-topbar">
+      <div class="pill" id="turnInfo">Turn 1 of 1</div>
+      <button class="pill danger" id="resetBtn" type="button">Reset</button>
+    </div>
+
+    <div class="play-stage">
+      <div class="orientation" id="orientationStage">
+        <button class="timer-button" id="advanceBtn" type="button" aria-label="Tap to pass turn">
+          <div class="current-player" id="currentPlayerName">Player</div>
+          <div class="timer-value" id="timerValue">2:00</div>
+          <div class="timer-caption" id="timerCaption">Tap anywhere on the timer when the turn ends to face the next player and restart the countdown.</div>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    const defaults = [
+      { enabled: true,  name: 'Player 1', seat: 'bottom', order: '1' },
+      { enabled: true,  name: 'Player 2', seat: 'left',   order: '2' },
+      { enabled: false, name: 'Player 3', seat: 'top',    order: '3' },
+      { enabled: false, name: 'Player 4', seat: 'right',  order: '4' }
+    ];
+
+    const seatOptions = [
+      { value: 'top', label: 'Top' },
+      { value: 'right', label: 'Right' },
+      { value: 'bottom', label: 'Bottom' },
+      { value: 'left', label: 'Left' }
+    ];
+
+    const rotationBySeat = {
+      bottom: '0deg',
+      left: '90deg',
+      top: '180deg',
+      right: '-90deg'
+    };
+
+    const state = {
+      totalSeconds: 120,
+      remainingSeconds: 120,
+      players: structuredClone(defaults),
+      activePlayers: [],
+      currentIndex: 0,
+      intervalId: null
+    };
+
+    const els = {
+      playersContainer: document.getElementById('playersContainer'),
+      previewBoard: document.getElementById('previewBoard'),
+      statusText: document.getElementById('statusText'),
+      minutesInput: document.getElementById('minutesInput'),
+      secondsInput: document.getElementById('secondsInput'),
+      startBtn: document.getElementById('startBtn'),
+      restoreBtn: document.getElementById('restoreBtn'),
+      playView: document.getElementById('playView'),
+      resetBtn: document.getElementById('resetBtn'),
+      advanceBtn: document.getElementById('advanceBtn'),
+      timerValue: document.getElementById('timerValue'),
+      currentPlayerName: document.getElementById('currentPlayerName'),
+      turnInfo: document.getElementById('turnInfo'),
+      timerCaption: document.getElementById('timerCaption'),
+      orientationStage: document.getElementById('orientationStage')
+    };
+
+    function formatTime(totalSeconds) {
+      const seconds = Math.max(0, Number(totalSeconds) || 0);
+      const mins = Math.floor(seconds / 60);
+      const secs = seconds % 60;
+      return `${mins}:${String(secs).padStart(2, '0')}`;
+    }
+
+    function playerCardTemplate(player, index) {
+      return `
+        <div class="player-card">
+          <div class="player-head">
+            <div class="player-title">Player slot ${index + 1}</div>
+            <label class="toggle" aria-label="Enable player ${index + 1}">
+              <input type="checkbox" data-field="enabled" data-index="${index}" ${player.enabled ? 'checked' : ''}>
+              <span class="track"></span>
+              <span class="thumb"></span>
+            </label>
+          </div>
+
+          <label>
+            Name
+            <input type="text" maxlength="20" data-field="name" data-index="${index}" value="${escapeHtml(player.name)}" placeholder="Player ${index + 1}">
+          </label>
+
+          <div class="player-grid">
+            <label>
+              Seat
+              <select data-field="seat" data-index="${index}">
+                ${seatOptions.map(option => `<option value="${option.value}" ${player.seat === option.value ? 'selected' : ''}>${option.label}</option>`).join('')}
+              </select>
+            </label>
+
+            <label>
+              Turn order
+              <select data-field="order" data-index="${index}">
+                <option value="1" ${player.order === '1' ? 'selected' : ''}>1st</option>
+                <option value="2" ${player.order === '2' ? 'selected' : ''}>2nd</option>
+                <option value="3" ${player.order === '3' ? 'selected' : ''}>3rd</option>
+                <option value="4" ${player.order === '4' ? 'selected' : ''}>4th</option>
+              </select>
+            </label>
+          </div>
+        </div>
+      `;
+    }
+
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#39;');
+    }
+
+    function renderPlayers() {
+      els.playersContainer.innerHTML = state.players.map(playerCardTemplate).join('');
+      bindPlayerInputs();
+      renderPreview();
+      validateConfig();
+    }
+
+    function bindPlayerInputs() {
+      els.playersContainer.querySelectorAll('[data-field]').forEach(control => {
+        control.addEventListener('input', handleConfigChange);
+        control.addEventListener('change', handleConfigChange);
+      });
+    }
+
+    function handleConfigChange(event) {
+      const index = Number(event.target.dataset.index);
+      const field = event.target.dataset.field;
+      let value;
+      if (field === 'enabled') {
+        value = event.target.checked;
+      } else {
+        value = event.target.value;
+      }
+      state.players[index][field] = value;
+      renderPreview();
+      validateConfig();
+      persistState();
+    }
+
+    function renderPreview() {
+      const activePlayers = getActivePlayers({ allowInvalid: true });
+      const seats = {
+        top: null, right: null, bottom: null, left: null
+      };
+      activePlayers.forEach(player => {
+        seats[player.seat] = player;
+      });
+
+      const seatMarkup = Object.entries(seats).map(([seat, player]) => {
+        if (!player) return '';
+        const orderText = `${ordinal(player.order)} turn`;
+        return `<div class="seat-chip seat-${seat}">${escapeHtml(player.name || 'Player')}<br><span style="font-weight:600; font-size:0.82rem; opacity:0.92">${orderText}</span></div>`;
+      }).join('');
+
+      els.previewBoard.innerHTML = `<div class="preview-center">Seat positions shown around the table.<br>Turn order is listed on each active player.</div>${seatMarkup}`;
+    }
+
+    function ordinal(value) {
+      const n = Number(value);
+      if (n === 1) return '1st';
+      if (n === 2) return '2nd';
+      if (n === 3) return '3rd';
+      return `${n}th`;
+    }
+
+    function getTurnSeconds() {
+      const mins = clamp(Number(els.minutesInput.value || 0), 0, 59);
+      const secs = clamp(Number(els.secondsInput.value || 0), 0, 59);
+      return mins * 60 + secs;
+    }
+
+    function clamp(value, min, max) {
+      return Math.min(max, Math.max(min, Number.isFinite(value) ? value : min));
+    }
+
+    function getActivePlayers({ allowInvalid = false } = {}) {
+      const players = state.players
+        .filter(player => player.enabled)
+        .map(player => ({
+          ...player,
+          name: (player.name || '').trim() || 'Player',
+          order: Number(player.order)
+        }));
+
+      if (allowInvalid) {
+        return players;
+      }
+
+      return players.sort((a, b) => a.order - b.order);
+    }
+
+    function validateConfig() {
+      const activePlayers = state.players.filter(player => player.enabled);
+      const totalSeconds = getTurnSeconds();
+
+      if (activePlayers.length === 0) {
+        setStatus('Enable at least one player.');
+        els.startBtn.disabled = true;
+        return false;
+      }
+
+      if (totalSeconds <= 0) {
+        setStatus('Turn time must be at least 1 second.');
+        els.startBtn.disabled = true;
+        return false;
+      }
+
+      const seatSet = new Set();
+      const orderSet = new Set();
+
+      for (const player of activePlayers) {
+        if (seatSet.has(player.seat)) {
+          setStatus('Each active player needs a unique seat.');
+          els.startBtn.disabled = true;
+          return false;
+        }
+        seatSet.add(player.seat);
+
+        if (orderSet.has(player.order)) {
+          setStatus('Each active player needs a unique turn order.');
+          els.startBtn.disabled = true;
+          return false;
+        }
+        orderSet.add(player.order);
+      }
+
+      setStatus(`${activePlayers.length} player${activePlayers.length > 1 ? 's' : ''} ready.`);
+      els.startBtn.disabled = false;
+      return true;
+    }
+
+    function setStatus(message) {
+      els.statusText.textContent = message;
+    }
+
+    function startGame() {
+      if (!validateConfig()) return;
+
+      state.totalSeconds = getTurnSeconds();
+      state.remainingSeconds = state.totalSeconds;
+      state.activePlayers = getActivePlayers().sort((a, b) => a.order - b.order);
+      state.currentIndex = 0;
+
+      updatePlayView();
+      els.playView.classList.add('active');
+      els.playView.setAttribute('aria-hidden', 'false');
+      startCountdown();
+      persistState();
+    }
+
+    function updatePlayView() {
+      const currentPlayer = state.activePlayers[state.currentIndex];
+      if (!currentPlayer) return;
+
+      els.currentPlayerName.textContent = currentPlayer.name;
+      els.turnInfo.textContent = `Turn ${state.currentIndex + 1} of ${state.activePlayers.length}`;
+      els.timerValue.textContent = formatTime(state.remainingSeconds);
+      els.timerValue.classList.toggle('expired', state.remainingSeconds === 0);
+      els.orientationStage.style.transform = `rotate(${rotationBySeat[currentPlayer.seat] || '0deg'})`;
+      const secondsText = formatTime(state.totalSeconds);
+      els.timerCaption.textContent = state.remainingSeconds === 0
+        ? 'Time is up. Tap to pass the turn and restart the timer.'
+        : `Tap to pass the turn early, or let the ${secondsText} timer run out before tapping.`;
+    }
+
+    function startCountdown() {
+      stopCountdown();
+      state.intervalId = window.setInterval(() => {
+        if (state.remainingSeconds > 0) {
+          state.remainingSeconds -= 1;
+          updatePlayView();
+        } else {
+          updatePlayView();
+        }
+      }, 1000);
+    }
+
+    function stopCountdown() {
+      if (state.intervalId) {
+        window.clearInterval(state.intervalId);
+        state.intervalId = null;
+      }
+    }
+
+    function advanceTurn() {
+      if (!state.activePlayers.length) return;
+      state.currentIndex = (state.currentIndex + 1) % state.activePlayers.length;
+      state.remainingSeconds = state.totalSeconds;
+      updatePlayView();
+    }
+
+    function resetGame() {
+      stopCountdown();
+      els.playView.classList.remove('active');
+      els.playView.setAttribute('aria-hidden', 'true');
+      state.remainingSeconds = state.totalSeconds;
+      updatePlayView();
+    }
+
+    function restoreDefaults() {
+      stopCountdown();
+      state.players = structuredClone(defaults);
+      els.minutesInput.value = 2;
+      els.secondsInput.value = 0;
+      persistState(true);
+      renderPlayers();
+      resetGame();
+    }
+
+    function persistState(clear = false) {
+      if (clear) {
+        localStorage.removeItem('rummikub-turn-counter-state');
+        return;
+      }
+      const snapshot = {
+        minutes: clamp(Number(els.minutesInput.value || 0), 0, 59),
+        seconds: clamp(Number(els.secondsInput.value || 0), 0, 59),
+        players: state.players
+      };
+      localStorage.setItem('rummikub-turn-counter-state', JSON.stringify(snapshot));
+    }
+
+    function loadPersistedState() {
+      try {
+        const raw = localStorage.getItem('rummikub-turn-counter-state');
+        if (!raw) return;
+        const saved = JSON.parse(raw);
+        if (Array.isArray(saved.players) && saved.players.length === 4) {
+          state.players = saved.players.map((player, index) => ({
+            enabled: Boolean(player.enabled),
+            name: typeof player.name === 'string' ? player.name : defaults[index].name,
+            seat: ['top', 'right', 'bottom', 'left'].includes(player.seat) ? player.seat : defaults[index].seat,
+            order: ['1', '2', '3', '4'].includes(String(player.order)) ? String(player.order) : defaults[index].order
+          }));
+        }
+        if (Number.isFinite(saved.minutes)) {
+          els.minutesInput.value = clamp(saved.minutes, 0, 59);
+        }
+        if (Number.isFinite(saved.seconds)) {
+          els.secondsInput.value = clamp(saved.seconds, 0, 59);
+        }
+      } catch (error) {
+        console.warn('Unable to load saved state', error);
+      }
+    }
+
+    els.startBtn.addEventListener('click', startGame);
+    els.restoreBtn.addEventListener('click', restoreDefaults);
+    els.resetBtn.addEventListener('click', resetGame);
+    els.advanceBtn.addEventListener('click', advanceTurn);
+    els.minutesInput.addEventListener('input', () => { validateConfig(); persistState(); });
+    els.secondsInput.addEventListener('input', () => { validateConfig(); persistState(); });
+
+    loadPersistedState();
+    renderPlayers();
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('../../sw.js').catch(function () {});
+      });
+    }
+  </script>
+</body>
+</html>

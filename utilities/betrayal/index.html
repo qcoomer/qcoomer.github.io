@@ -1,0 +1,1287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Betrayal Utility">
+  <title>Betrayal Player Assignment</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root {
+      --bg: #09111f;
+      --bg-2: #111c2f;
+      --panel: rgba(13, 23, 40, 0.82);
+      --panel-2: rgba(19, 31, 52, 0.92);
+      --panel-border: rgba(148, 163, 184, 0.18);
+      --text: #e5edf9;
+      --muted: #9fb0c9;
+      --primary: #7c8cff;
+      --primary-strong: #5e6ef6;
+      --success: #2ec98a;
+      --danger: #ff6a6a;
+      --shadow: 0 12px 30px rgba(0, 0, 0, 0.28);
+      --radius-lg: 24px;
+      --radius-md: 18px;
+      --radius-sm: 14px;
+      --safe-top: max(16px, env(safe-area-inset-top));
+      --safe-bottom: max(16px, env(safe-area-inset-bottom));
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      min-height: 100%;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text);
+      background:
+        radial-gradient(circle at top left, rgba(124, 140, 255, 0.18), transparent 26%),
+        radial-gradient(circle at top right, rgba(46, 201, 138, 0.10), transparent 20%),
+        linear-gradient(180deg, #08101d 0%, #0a1424 45%, #0c172a 100%);
+      line-height: 1.5;
+      -webkit-user-select: none;
+      user-select: none;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .app-container {
+      min-height: 100dvh;
+      padding: var(--safe-top) 16px var(--safe-bottom);
+    }
+
+    .shell {
+      max-width: 1320px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 330px minmax(0, 1fr);
+      gap: 20px;
+      align-items: start;
+    }
+
+    .sidebar {
+      position: sticky;
+      top: calc(var(--safe-top) + 4px);
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .main-content {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      min-width: 0;
+    }
+
+    .panel {
+      background: linear-gradient(180deg, rgba(20,31,52,0.95), rgba(11,20,35,0.95));
+      border: 1px solid var(--panel-border);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(16px);
+    }
+
+    header.hero {
+      padding: 22px;
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .hero-top {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+    }
+
+    .home-link, .menu-toggle {
+      min-height: 48px;
+      border-radius: 999px;
+      border: 1px solid rgba(255,255,255,0.12);
+      background: rgba(255,255,255,0.06);
+      color: var(--text);
+      padding: 0 16px;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .menu-toggle {
+      display: none;
+      width: 48px;
+      justify-content: center;
+      padding: 0;
+    }
+
+    .hero-title h1 {
+      font-size: clamp(1.8rem, 3.5vw, 2.7rem);
+      line-height: 1.05;
+      letter-spacing: -0.04em;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .hero-title p {
+      color: var(--muted);
+      max-width: 720px;
+      font-size: 1rem;
+    }
+
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+
+    .stat {
+      padding: 16px;
+      border-radius: var(--radius-md);
+      background: rgba(255,255,255,0.05);
+      border: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .stat-value {
+      font-size: 1rem;
+      font-weight: 700;
+    }
+
+    .card {
+      padding: 22px;
+    }
+
+    .card-title {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-size: 1.1rem;
+      font-weight: 700;
+      margin-bottom: 18px;
+    }
+
+    .section-copy {
+      color: var(--muted);
+      margin: -4px 0 16px;
+      font-size: 0.95rem;
+    }
+
+    .edition-selector,
+    .mode-selector {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 10px;
+    }
+
+    .edition-btn,
+    .mode-btn {
+      width: 100%;
+      min-height: 58px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.05);
+      color: var(--text);
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      padding: 12px 14px;
+      cursor: pointer;
+      transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease;
+    }
+
+    .edition-btn.active,
+    .mode-btn.active {
+      background: linear-gradient(135deg, rgba(124,140,255,0.30), rgba(94,110,246,0.48));
+      border-color: rgba(124,140,255,0.9);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.12);
+    }
+
+    .player-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    label {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #d8e4f6;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    input {
+      min-height: 58px;
+      border-radius: 16px;
+      border: 1px solid rgba(255,255,255,0.08);
+      background: rgba(255,255,255,0.06);
+      color: var(--text);
+      padding: 0 16px;
+      font-size: 1rem;
+      outline: none;
+    }
+
+    input::placeholder {
+      color: #8193af;
+    }
+
+    input:focus {
+      border-color: rgba(124,140,255,0.9);
+      box-shadow: 0 0 0 4px rgba(124,140,255,0.18);
+      background: rgba(255,255,255,0.09);
+    }
+
+    .collapsible {
+      border-radius: 18px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.06);
+      overflow: hidden;
+    }
+
+    .collapsible-header {
+      min-height: 58px;
+      padding: 14px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      cursor: pointer;
+      background: rgba(255,255,255,0.03);
+    }
+
+    .collapsible-header h3 {
+      font-size: 0.98rem;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .collapsible-content {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.28s ease;
+    }
+
+    .collapsible-content-inner {
+      padding: 16px;
+    }
+
+    .collapsible-icon {
+      transition: transform 0.25s ease;
+      flex-shrink: 0;
+    }
+
+    .collapsible-icon.collapsed {
+      transform: rotate(-90deg);
+    }
+
+    .character-controls {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      margin-top: 12px;
+    }
+
+    .btn, .btn-inline {
+      min-height: 58px;
+      border: 0;
+      border-radius: 16px;
+      padding: 0 18px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      transition: transform 0.15s ease, opacity 0.15s ease;
+    }
+
+    .btn:active,
+    .edition-btn:active,
+    .mode-btn:active,
+    .btn-inline:active {
+      transform: scale(0.98);
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #7c8cff, #5e6ef6);
+      color: white;
+    }
+
+    .btn-secondary {
+      background: linear-gradient(135deg, #8ea2c3, #6d7d97);
+      color: #08101d;
+    }
+
+    .btn-danger {
+      background: linear-gradient(135deg, #ff8a8a, #ff6a6a);
+      color: #220606;
+    }
+
+    .btn-success {
+      background: linear-gradient(135deg, #4de0a4, #2ec98a);
+      color: #062115;
+    }
+
+    .btn-group,
+    .action-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+
+    .action-buttons {
+      margin-top: 18px;
+    }
+
+    .character-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 14px;
+      max-height: none;
+      overflow: visible;
+      padding: 0;
+    }
+
+    .character-option {
+      border-radius: 18px;
+      padding: 14px;
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.14);
+    }
+
+    .character-btn {
+      width: 100%;
+      min-height: 170px;
+      border: 0;
+      border-radius: 16px;
+      background: rgba(255,255,255,0.08);
+      color: inherit;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      padding: 14px;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+    }
+
+    .character-btn.selected {
+      box-shadow: 0 0 0 3px rgba(255,255,255,0.7);
+      background: rgba(255,255,255,0.16);
+    }
+
+    .character-image {
+      width: 92px;
+      height: 92px;
+      border-radius: 18px;
+      object-fit: cover;
+      border: 3px solid rgba(255,255,255,0.35);
+    }
+
+    .character-name {
+      text-align: center;
+      font-size: 0.96rem;
+      font-weight: 700;
+      line-height: 1.25;
+    }
+
+    .results-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+    }
+
+    .player-result {
+      border-radius: 22px;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      align-items: center;
+      text-align: center;
+      box-shadow: 0 18px 28px rgba(0,0,0,0.22);
+    }
+
+    .player-name {
+      font-size: 1.28rem;
+      font-weight: 800;
+      line-height: 1.1;
+    }
+
+    .player-color {
+      padding: 8px 14px;
+      border-radius: 999px;
+      background: rgba(0,0,0,0.18);
+      font-weight: 700;
+      font-size: 0.92rem;
+    }
+
+    .player-character {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .player-character-image {
+      width: 110px;
+      height: 110px;
+      border-radius: 18px;
+      object-fit: cover;
+      border: 4px solid rgba(255,255,255,0.4);
+    }
+
+    .player-character-name {
+      font-size: 1.02rem;
+      font-weight: 700;
+      line-height: 1.25;
+    }
+
+    .results-toolbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      flex-wrap: wrap;
+      margin-bottom: 16px;
+    }
+
+    .muted {
+      color: var(--muted);
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .overlay {
+      display: none;
+    }
+
+    .quick-note {
+      padding: 14px 16px;
+      border-radius: 16px;
+      background: rgba(124,140,255,0.10);
+      border: 1px solid rgba(124,140,255,0.18);
+      color: #dce4ff;
+      font-size: 0.92rem;
+    }
+
+    .mobile-action-bar {
+      display: none;
+    }
+
+    @supports (-webkit-touch-callout: none) {
+      input, select, textarea {
+        font-size: 16px;
+      }
+    }
+
+    @media (max-width: 1100px) {
+      .shell {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        position: fixed;
+        inset: 0 auto 0 0;
+        width: min(88vw, 360px);
+        padding: calc(var(--safe-top) + 4px) 14px var(--safe-bottom);
+        background: rgba(7, 12, 22, 0.92);
+        transform: translateX(-104%);
+        transition: transform 0.22s ease;
+        z-index: 40;
+        overflow: auto;
+      }
+
+      .sidebar.active {
+        transform: translateX(0);
+      }
+
+      .overlay.active {
+        display: block;
+        position: fixed;
+        inset: 0;
+        background: rgba(0,0,0,0.42);
+        z-index: 35;
+      }
+
+      .menu-toggle {
+        display: inline-flex;
+      }
+
+      .hero-stats {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    @media (max-width: 820px) {
+      .app-container {
+        padding-left: 12px;
+        padding-right: 12px;
+      }
+
+      .card,
+      header.hero {
+        padding: 18px;
+      }
+
+      .player-grid,
+      .character-grid,
+      .results-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .edition-selector,
+      .mode-selector {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    @media (max-width: 640px) {
+      .hero-top {
+        align-items: flex-start;
+      }
+
+      .edition-selector,
+      .mode-selector {
+        grid-template-columns: 1fr;
+      }
+
+      .action-buttons {
+        display: none;
+      }
+
+      .mobile-action-bar {
+        position: sticky;
+        bottom: 0;
+        display: grid;
+        grid-template-columns: 1fr;
+        gap: 10px;
+        padding: 12px;
+        margin-top: 18px;
+        border-radius: 22px;
+        background: rgba(8, 14, 24, 0.92);
+        border: 1px solid rgba(255,255,255,0.08);
+        backdrop-filter: blur(16px);
+      }
+
+      .mobile-action-bar .btn,
+      .mobile-action-bar > div,
+      .mobile-action-bar > div > .btn {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-container">
+    <div class="shell">
+      <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
+
+      <aside class="sidebar" id="sidebar">
+        <div class="panel card">
+          <h2 class="card-title"><i class="fas fa-gamepad"></i> Game edition</h2>
+          <p class="section-copy">Switch between 2nd and 3rd Edition without changing the assignment flow.</p>
+          <div class="edition-selector">
+            <div id="edition2Btn" class="edition-btn active" onclick="setEdition(2)">
+              <i class="fas fa-dice-two"></i>
+              <span>2nd Edition</span>
+            </div>
+            <div id="edition3Btn" class="edition-btn" onclick="setEdition(3)">
+              <i class="fas fa-dice-three"></i>
+              <span>3rd Edition</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="panel card">
+          <h2 class="card-title"><i class="fas fa-sliders"></i> Assignment mode</h2>
+          <p class="section-copy">Use the same tool for quick color setup or full color plus character assignment.</p>
+          <div class="mode-selector">
+            <div id="colorsOnlyBtn" class="mode-btn active" onclick="setMode('colorsOnly')">
+              <i class="fas fa-palette"></i> Colors Only
+            </div>
+            <div id="colorsAndCharsBtn" class="mode-btn" onclick="setMode('colorsAndChars')">
+              <i class="fas fa-user-group"></i> Colors & Characters
+            </div>
+          </div>
+          <div class="quick-note" style="margin-top:16px;">
+            Up to 6 players. Character locking remains optional and random assignment still works as before.
+          </div>
+        </div>
+      </aside>
+
+      <main class="main-content">
+        <header class="hero panel">
+          <div class="hero-top">
+            <a class="home-link" href="../../index.html">
+              <i class="fas fa-chevron-left"></i>
+              <span>All utilities</span>
+            </a>
+            <button class="menu-toggle" onclick="toggleSidebar()" aria-label="Open settings">
+              <i class="fas fa-sliders"></i>
+            </button>
+          </div>
+          <div class="hero-title">
+            <h1>Betrayal player assignment</h1>
+            <p>Modernized for phone and iPad screens. The assignment logic stays the same; this update focuses on touch targets, spacing, readability, and faster in-game use.</p>
+          </div>
+          <div class="hero-stats">
+            <div class="stat">
+              <div class="stat-label">Players supported</div>
+              <div class="stat-value">1 to 6</div>
+            </div>
+            <div class="stat">
+              <div class="stat-label">Modes</div>
+              <div class="stat-value">Colors / Colors + Characters</div>
+            </div>
+            <div class="stat">
+              <div class="stat-label">Optimized for</div>
+              <div class="stat-value">iPhone, iPad, GitHub Pages</div>
+            </div>
+          </div>
+        </header>
+
+        <section class="panel card">
+          <h2 class="card-title"><i class="fas fa-users"></i> Player information</h2>
+          <p class="section-copy">Enter only the players who are actually playing. Blank fields are ignored.</p>
+
+          <div class="collapsible">
+            <div class="collapsible-header" onclick="toggleCollapsible('playerInfoCollapsible')">
+              <h3><i class="fas fa-keyboard"></i> Player input fields</h3>
+              <svg class="collapsible-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="18 15 12 9 6 15"></polyline>
+              </svg>
+            </div>
+            <div id="playerInfoCollapsible" class="collapsible-content" style="max-height: 1000px;">
+              <div class="collapsible-content-inner">
+                <div class="player-grid">
+                  <div class="input-group">
+                    <label for="player1"><i class="fas fa-user"></i> Player 1</label>
+                    <input type="text" id="player1" placeholder="Enter name">
+                  </div>
+                  <div class="input-group">
+                    <label for="player2"><i class="fas fa-user"></i> Player 2</label>
+                    <input type="text" id="player2" placeholder="Enter name">
+                  </div>
+                  <div class="input-group">
+                    <label for="player3"><i class="fas fa-user"></i> Player 3</label>
+                    <input type="text" id="player3" placeholder="Enter name">
+                  </div>
+                  <div class="input-group">
+                    <label for="player4"><i class="fas fa-user"></i> Player 4</label>
+                    <input type="text" id="player4" placeholder="Enter name">
+                  </div>
+                  <div class="input-group">
+                    <label for="player5"><i class="fas fa-user"></i> Player 5</label>
+                    <input type="text" id="player5" placeholder="Enter name">
+                  </div>
+                  <div class="input-group">
+                    <label for="player6"><i class="fas fa-user"></i> Player 6</label>
+                    <input type="text" id="player6" placeholder="Enter name">
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="action-buttons">
+            <div id="colorsOnlyControls">
+              <button class="btn btn-primary" onclick="assignColors()">
+                <i class="fas fa-palette"></i>
+                Assign Colors
+              </button>
+            </div>
+            <div id="colorsAndCharsControlsMain" class="hidden">
+              <button class="btn btn-primary" onclick="assignBoth()">
+                <i class="fas fa-user-plus"></i>
+                Assign Colors & Characters
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel card">
+          <h2 class="card-title"><i class="fas fa-wand-magic-sparkles"></i> Character options</h2>
+          <p class="section-copy">Only used in Colors & Characters mode. Leave both unselected for a random character within that color. Select one to lock it in.</p>
+
+          <div id="colorsAndCharsControls" class="hidden">
+            <div class="character-controls">
+              <div class="btn-group">
+                <button class="btn btn-secondary" onclick="toggleAllCharacters()">
+                  <i class="fas fa-check-double"></i>
+                  Toggle All
+                </button>
+                <button class="btn btn-danger" onclick="resetCharacterOptions()">
+                  <i class="fas fa-rotate-left"></i>
+                  Reset Selections
+                </button>
+              </div>
+
+              <div class="collapsible">
+                <div class="collapsible-header" onclick="toggleCollapsible('characterOptionsCollapsible')">
+                  <h3><i class="fas fa-user-check"></i> Select characters</h3>
+                  <svg class="collapsible-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.25" stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="18 15 12 9 6 15"></polyline>
+                  </svg>
+                </div>
+                <div id="characterOptionsCollapsible" class="collapsible-content" style="max-height: 1000px;">
+                  <div class="collapsible-content-inner">
+                    <div id="characterOptions" class="character-grid"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="quick-note" id="colorsOnlyNote">
+            Switch the mode in Settings to enable character selection.
+          </div>
+        </section>
+
+        <section class="panel card results-container">
+          <div class="results-toolbar">
+            <h2 class="card-title" style="margin-bottom:0;"><i class="fas fa-list-check"></i> Results</h2>
+            <div class="muted">Assignments appear here after you run the tool.</div>
+          </div>
+          <div id="results" class="results-grid"></div>
+
+          <div class="mobile-action-bar">
+            <div id="colorsOnlyControlsMobile">
+              <button class="btn btn-primary" onclick="assignColors()">
+                <i class="fas fa-palette"></i>
+                Assign Colors
+              </button>
+            </div>
+            <div id="colorsAndCharsControlsMobile" class="hidden">
+              <button class="btn btn-primary" onclick="assignBoth()">
+                <i class="fas fa-user-plus"></i>
+                Assign Colors & Characters
+              </button>
+            </div>
+          </div>
+        </section>
+      </main>
+    </div>
+  </div>
+
+  <script>
+const editions = {
+            2: {
+                'Red': {
+                    characters: [
+                        { name: 'Ox Bellows', image: 'https://i.imgur.com/RLxb978.png' },
+                        { name: 'Darrin "Flash" Williams', image: 'https://i.imgur.com/JNxBLxE.png' }
+                    ],
+                    bgColor: '#8a484f',
+                    textColor: '#ffffff'
+                },
+                'Blue': {
+                    characters: [
+                        { name: 'Madam Zostra', image: 'https://i.imgur.com/zd96zE2.png' },
+                        { name: 'Vivian Lopez', image: 'https://i.imgur.com/kxZkehg.png' }
+                    ],
+                    bgColor: '#416880',
+                    textColor: '#ffffff'
+                },
+                'Green': {
+                    characters: [
+                        { name: 'Brandon Jaspers', image: 'https://i.imgur.com/ybmLZBq.png' },
+                        { name: 'Peter Akimoto', image: 'https://i.imgur.com/pU5i0fz.png' }
+                    ],
+                    bgColor: '#679d7b',
+                    textColor: '#ffffff'
+                },
+                'White': {
+                    characters: [
+                        { name: 'Father Rhinehardt', image: 'https://i.imgur.com/6cGy1HI.png' },
+                        { name: 'Professor Longfellow', image: 'https://i.imgur.com/hJWH47N.png' }
+                    ],
+                    bgColor: '#e8eadd',
+                    textColor: '#1e293b'
+                },
+                'Purple': {
+                    characters: [
+                        { name: 'Jenny LeClerc', image: 'https://i.imgur.com/3oRygh3.png' },
+                        { name: 'Heather Granville', image: 'https://i.imgur.com/3UEyErb.png' }
+                    ],
+                    bgColor: '#9b4e76',
+                    textColor: '#ffffff'
+                },
+                'Yellow': {
+                    characters: [
+                        { name: 'Zoe Ingstrom', image: 'https://i.imgur.com/bmKJVj0.png' },
+                        { name: 'Missy Dubourde', image: 'https://i.imgur.com/FQGWzqa.png' }
+                    ],
+                    bgColor: '#daba64',
+                    textColor: '#ffffff'
+                }
+            },
+            3: {
+                'Red': {
+                    characters: [
+                        { name: 'Josef "Brosef" Hooper', image: 'https://i.imgur.com/GovLJnu.png' },
+                        { name: 'Oliver Swift', image: 'https://i.imgur.com/HEidqJ3.png' }
+                    ],
+                    bgColor: '#a13332',
+                    textColor: '#ffffff'
+                },
+                'Blue': {
+                    characters: [
+                        { name: 'Stephanie Richter', image: 'https://i.imgur.com/75dQhh6.png' },
+                        { name: 'Persephone Puleri', image: 'https://i.imgur.com/bG1xhCe.png' }
+                    ],
+                    bgColor: '#316693',
+                    textColor: '#ffffff'
+                },
+                'Green': {
+                    characters: [
+                        { name: 'Sammy Angler', image: 'https://i.imgur.com/HyWeXa4.png' },
+                        { name: 'Jaden Jones', image: 'https://i.imgur.com/p4wxRiI.png' }
+                    ],
+                    bgColor: '#37a272',
+                    textColor: '#ffffff'
+                },
+                'White': {
+                    characters: [
+                        { name: 'Father Warren Leung', image: 'https://i.imgur.com/vmu9yWn.png' },
+                        { name: 'Dan Nguyen, M.D.', image: 'https://i.imgur.com/ahp0M3W.png' }
+                    ],
+                    bgColor: '#faf6f3',
+                    textColor: '#000000'
+                },
+                'Purple': {
+                    characters: [
+                        { name: 'Michelle Monroe', image: 'https://i.imgur.com/sqqBj0w.png' },
+                        { name: 'Brittani "Beat Box" Bowen', image: 'https://i.imgur.com/KAUZfEi.png' }
+                    ],
+                    bgColor: '#603f7f',
+                    textColor: '#ffffff'
+                },
+                'Yellow': {
+                    characters: [
+                        { name: 'Isa Valencia', image: 'https://i.imgur.com/zFRPyt3.png' },
+                        { name: 'Anita Hernandez', image: 'https://i.imgur.com/4k1mmBH.png' }
+                    ],
+                    bgColor: '#c99529',
+                    textColor: '#1e293b'
+                }
+            }
+        };
+
+        // Current game state
+        let currentEdition = 2;
+        let currentMode = 'colorsOnly';
+        let characterSelections = {};
+        let colorData = JSON.parse(JSON.stringify(editions[2])); // Initialize with 2nd edition
+        let sidebarCollapsed = true;
+        
+        // Toggle sidebar visibility
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const overlay = document.getElementById('overlay');
+            sidebarCollapsed = !sidebarCollapsed;
+            sidebar.classList.toggle('active', !sidebarCollapsed);
+            overlay.classList.toggle('active', !sidebarCollapsed);
+        }
+        
+        // Toggle collapsible section
+        function toggleCollapsible(id) {
+            const content = document.getElementById(id);
+            const icon = content.previousElementSibling.querySelector('.collapsible-icon');
+            
+            if (content.style.maxHeight) {
+                content.style.maxHeight = null;
+                icon.classList.add('collapsed');
+            } else {
+                content.style.maxHeight = content.scrollHeight + "px";
+                icon.classList.remove('collapsed');
+            }
+        }
+        
+        // Set the game edition
+        function setEdition(edition) {
+            currentEdition = edition;
+            document.getElementById('edition2Btn').classList.toggle('active', edition === 2);
+            document.getElementById('edition3Btn').classList.toggle('active', edition === 3);
+            
+            // Update color data with the selected edition
+            colorData = JSON.parse(JSON.stringify(editions[edition]));
+            
+            // Reset character selections
+            resetCharacterOptions();
+            
+            // Reinitialize character options if in Colors & Characters mode
+            if (currentMode === 'colorsAndChars') {
+                initializeCharacterOptions();
+            }
+            
+            // Close sidebar on mobile after selection
+            if (window.innerWidth <= 1024) {
+                toggleSidebar();
+            }
+        }
+        
+        // Set the assignment mode
+        function setMode(mode) {
+            currentMode = mode;
+            document.getElementById('colorsOnlyBtn').classList.toggle('active', mode === 'colorsOnly');
+            document.getElementById('colorsAndCharsBtn').classList.toggle('active', mode === 'colorsAndChars');
+            document.getElementById('colorsOnlyControls').classList.toggle('hidden', mode !== 'colorsOnly');
+            document.getElementById('colorsAndCharsControls').classList.toggle('hidden', mode !== 'colorsAndChars');
+            document.getElementById('colorsAndCharsControlsMain').classList.toggle('hidden', mode !== 'colorsAndChars');
+            
+            // Initialize character options if switching to Colors & Characters mode
+            if (mode === 'colorsAndChars') {
+                initializeCharacterOptions();
+            }
+        }
+        
+        // Initialize character options
+        function initializeCharacterOptions() {
+            const container = document.getElementById('characterOptions');
+            container.innerHTML = '';
+            
+            // Reset assigned flags
+            for (const color in colorData) {
+                colorData[color].assigned = false;
+            }
+            
+            // Reset character selections
+            characterSelections = {};
+            
+            for (const [color, data] of Object.entries(colorData)) {
+                const optionDiv = document.createElement('div');
+                optionDiv.className = 'character-option';
+                optionDiv.style.backgroundColor = data.bgColor;
+                optionDiv.style.color = data.textColor;
+                
+                const colorLabel = document.createElement('div');
+                colorLabel.textContent = color;
+                colorLabel.style.fontWeight = '600';
+                colorLabel.style.textAlign = 'center';
+                optionDiv.appendChild(colorLabel);
+                
+                // Create buttons for each character
+                data.characters.forEach((character, index) => {
+                    const charBtn = document.createElement('button');
+                    charBtn.className = 'character-btn';
+                    charBtn.style.color = data.textColor;
+                    charBtn.onclick = () => toggleCharacter(color, index);
+                    
+                    // Add character image
+                    const charImage = document.createElement('img');
+                    charImage.className = 'character-image';
+                    charImage.src = character.image;
+                    charImage.alt = character.name;
+                    
+                    // Add character name
+                    const charName = document.createElement('div');
+                    charName.className = 'character-name';
+                    charName.textContent = character.name;
+                    
+                    charBtn.appendChild(charImage);
+                    charBtn.appendChild(charName);
+                    optionDiv.appendChild(charBtn);
+                });
+                
+                container.appendChild(optionDiv);
+                
+                // Initialize selections
+                characterSelections[color] = {
+                    0: false,
+                    1: false
+                };
+            }
+        }
+        
+        // Toggle a specific character
+        function toggleCharacter(color, index) {
+            characterSelections[color][index] = !characterSelections[color][index];
+            updateButtonStyles();
+        }
+        
+        // Toggle all characters
+        function toggleAllCharacters() {
+            for (const color in characterSelections) {
+                characterSelections[color][0] = !characterSelections[color][0];
+                characterSelections[color][1] = !characterSelections[color][1];
+            }
+            updateButtonStyles();
+        }
+        
+        // Reset all character selections
+        function resetCharacterOptions() {
+            characterSelections = {};
+            for (const color in colorData) {
+                characterSelections[color] = {
+                    0: false,
+                    1: false
+                };
+            }
+            updateButtonStyles();
+        }
+        
+        // Update button styles based on selection state
+        function updateButtonStyles() {
+            const buttons = document.querySelectorAll('.character-btn');
+            if (buttons.length === 0) return;
+            
+            let buttonIndex = 0;
+            for (const color in characterSelections) {
+                for (let i = 0; i < 2; i++) {
+                    buttons[buttonIndex].classList.toggle('selected', characterSelections[color][i]);
+                    buttonIndex++;
+                }
+            }
+        }
+        
+        // Get player names from input fields
+        function getPlayerNames() {
+            const players = [];
+            for (let i = 1; i <= 6; i++) {
+                const playerName = document.getElementById(`player${i}`).value.trim();
+                if (playerName) {
+                    players.push(playerName);
+                }
+            }
+            return players;
+        }
+        
+        // Validate player count
+        function validatePlayerCount(players) {
+            if (players.length === 0) {
+                alert('Please enter at least one player name.');
+                return false;
+            }
+            
+            if (players.length > Object.keys(colorData).length) {
+                alert(`You can only assign up to ${Object.keys(colorData).length} players (one per color).`);
+                return false;
+            }
+            
+            return true;
+        }
+        
+        // Assign only colors
+        function assignColors() {
+            // Reset assigned flags
+            for (const color in colorData) {
+                colorData[color].assigned = false;
+            }
+            
+            const players = getPlayerNames();
+            if (!validatePlayerCount(players)) return;
+            
+            // Shuffle colors
+            const colors = Object.keys(colorData);
+            const shuffledColors = [...colors].sort(() => 0.5 - Math.random());
+            
+            // Assign colors to players
+            const assignments = [];
+            for (let i = 0; i < players.length; i++) {
+                const color = shuffledColors[i];
+                assignments.push({
+                    name: players[i],
+                    color: color,
+                    bgColor: colorData[color].bgColor,
+                    textColor: colorData[color].textColor
+                });
+            }
+            
+            // Display results
+            displayResults(assignments, false);
+        }
+        
+        // Assign both colors and characters
+        function assignBoth() {
+            // Reset assigned flags
+            for (const color in colorData) {
+                colorData[color].assigned = false;
+            }
+            
+            const players = getPlayerNames();
+            if (!validatePlayerCount(players)) return;
+            
+            // Prepare available colors and characters
+            const availableColors = [];
+            for (const [color, data] of Object.entries(colorData)) {
+                // Check if a specific character is selected for this color
+                let forcedCharacter = null;
+                if (characterSelections[color][0] && !characterSelections[color][1]) {
+                    forcedCharacter = data.characters[0];
+                } else if (characterSelections[color][1] && !characterSelections[color][0]) {
+                    forcedCharacter = data.characters[1];
+                }
+                
+                availableColors.push({
+                    color: color,
+                    characters: data.characters,
+                    bgColor: data.bgColor,
+                    textColor: data.textColor,
+                    forcedCharacter: forcedCharacter
+                });
+            }
+            
+            // Shuffle available colors
+            const shuffledColors = [...availableColors].sort(() => 0.5 - Math.random());
+            
+            // Assign colors and characters to players
+            const assignments = [];
+            for (let i = 0; i < players.length; i++) {
+                const colorInfo = shuffledColors[i];
+                let character;
+                
+                if (colorInfo.forcedCharacter) {
+                    character = colorInfo.forcedCharacter;
+                } else {
+                    // Randomly select one of the two characters
+                    character = colorInfo.characters[Math.floor(Math.random() * 2)];
+                }
+                
+                assignments.push({
+                    name: players[i],
+                    color: colorInfo.color,
+                    character: character.name,
+                    characterImage: character.image,
+                    bgColor: colorInfo.bgColor,
+                    textColor: colorInfo.textColor
+                });
+            }
+            
+            // Display results
+            displayResults(assignments, true);
+        }
+        
+        // Display assignment results
+        function displayResults(assignments, showCharacters) {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '';
+            
+            assignments.forEach(assignment => {
+                const playerCard = document.createElement('div');
+                playerCard.className = 'player-result';
+                playerCard.style.backgroundColor = assignment.bgColor;
+                playerCard.style.color = assignment.textColor;
+                
+                // Player name
+                const nameDiv = document.createElement('div');
+                nameDiv.className = 'player-name';
+                nameDiv.textContent = assignment.name;
+                playerCard.appendChild(nameDiv);
+                
+                // Color indicator
+                const colorDiv = document.createElement('div');
+                colorDiv.className = 'player-color';
+                colorDiv.textContent = assignment.color;
+                playerCard.appendChild(colorDiv);
+                
+                if (showCharacters) {
+                    // Character display
+                    const charContainer = document.createElement('div');
+                    charContainer.className = 'player-character';
+                    
+                    // Character image
+                    const charImage = document.createElement('img');
+                    charImage.className = 'player-character-image';
+                    charImage.src = assignment.characterImage;
+                    charImage.alt = assignment.character;
+                    
+                    // Character name
+                    const charName = document.createElement('div');
+                    charName.className = 'player-character-name';
+                    charName.textContent = assignment.character;
+                    
+                    charContainer.appendChild(charImage);
+                    charContainer.appendChild(charName);
+                    playerCard.appendChild(charContainer);
+                }
+                
+                resultsDiv.appendChild(playerCard);
+            });
+            
+            // Scroll to results
+            resultsDiv.scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // Initialize the page
+        window.onload = function() {
+            setEdition(2);
+            setMode('colorsOnly');
+            
+            // Set up responsive behavior
+            function handleResize() {
+                const sidebar = document.getElementById('sidebar');
+                const overlay = document.getElementById('overlay');
+                
+                if (window.innerWidth > 1024) {
+                    // Desktop view - sidebar always visible
+                    sidebar.classList.add('active');
+                    overlay.classList.remove('active');
+                    sidebarCollapsed = false;
+                } else {
+                    // Mobile/tablet view - sidebar hidden by default
+                    sidebar.classList.remove('active');
+                    overlay.classList.remove('active');
+                    sidebarCollapsed = true;
+                }
+            }
+            
+            // Initial call
+            handleResize();
+            
+            // Add event listener
+            window.addEventListener('resize', handleResize);
+        };
+    
+    // UI-only updates for the modernized layout
+    const originalSetMode = setMode;
+    setMode = function(mode) {
+      originalSetMode(mode);
+      const note = document.getElementById('colorsOnlyNote');
+      const mobileChars = document.getElementById('colorsAndCharsControlsMobile');
+      const mobileColors = document.getElementById('colorsOnlyControlsMobile');
+      if (note) note.classList.toggle('hidden', mode === 'colorsAndChars');
+      if (mobileChars) mobileChars.classList.toggle('hidden', mode !== 'colorsAndChars');
+      if (mobileColors) mobileColors.classList.toggle('hidden', mode !== 'colorsOnly');
+    };
+  </script>
+</body>
+</html>
