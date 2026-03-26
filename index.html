@@ -1,1256 +1,258 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <meta name="apple-mobile-web-app-title" content="Player Assignment">
-    <title>Player Assignment Tool</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        :root {
-            --primary: #6366f1;
-            --primary-hover: #4f46e5;
-            --secondary: #f59e0b;
-            --secondary-hover: #d97706;
-            --danger: #ef4444;
-            --danger-hover: #dc2626;
-            --success: #10b981;
-            --success-hover: #059669;
-            --dark: #1e293b;
-            --light: #f8fafc;
-            --gray: #94a3b8;
-            --card-bg: #ffffff;
-            --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
-            --shadow-md: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
-            background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
-            color: var(--dark);
-            line-height: 1.6;
-            height: 100vh;
-            overflow: hidden;
-            -webkit-user-select: none;
-            -moz-user-select: none;
-            -ms-user-select: none;
-            user-select: none;
-            display: flex;
-            flex-direction: column;
-        }
-
-        .app-container {
-            display: flex;
-            flex-direction: column;
-            height: 100vh;
-            padding-top: env(safe-area-inset-top);
-            padding-bottom: env(safe-area-inset-bottom);
-        }
-
-        header {
-            display: flex;
-            align-items: center;
-            padding: 1rem 1.5rem;
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
-            color: white;
-            box-shadow: var(--shadow);
-            position: relative;
-            z-index: 20;
-            flex-shrink: 0;
-        }
-
-        .header-content {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            width: 100%;
-        }
-
-        .header-title {
-            text-align: left;
-        }
-
-        h1 {
-            font-size: 1.5rem;
-            font-weight: 700;
-            margin-bottom: 0.25rem;
-        }
-
-        .subtitle {
-            font-size: 0.9rem;
-            opacity: 0.9;
-            max-width: 600px;
-        }
-
-        .menu-toggle {
-            background: rgba(255, 255, 255, 0.2);
-            border: none;
-            border-radius: 10px;
-            width: 44px;
-            height: 44px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-
-        .menu-toggle:active {
-            background: rgba(255, 255, 255, 0.3);
-            transform: scale(0.95);
-        }
-
-        .content-area {
-            display: flex;
-            flex: 1;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .sidebar {
-            width: 300px;
-            background-color: var(--card-bg);
-            box-shadow: var(--shadow);
-            padding: 1.5rem;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            flex-shrink: 0;
-            z-index: 10;
-            transition: transform 0.3s ease;
-        }
-
-        .main-content {
-            flex: 1;
-            padding: 1.5rem;
-            overflow-y: auto;
-            display: flex;
-            flex-direction: column;
-            gap: 1.5rem;
-        }
-
-        .card {
-            background-color: var(--card-bg);
-            border-radius: 16px;
-            box-shadow: var(--shadow);
-            padding: 1.5rem;
-            margin-bottom: 0;
-        }
-
-        .card-title {
-            font-size: 1.25rem;
-            font-weight: 600;
-            margin-bottom: 1.25rem;
-            color: var(--dark);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .player-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 1.25rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .input-group {
-            display: flex;
-            flex-direction: column;
-        }
-
-        label {
-            font-size: 0.875rem;
-            font-weight: 500;
-            margin-bottom: 0.5rem;
-            color: var(--dark);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        input {
-            padding: 0.875rem 1rem;
-            border: 1px solid #e2e8f0;
-            border-radius: 12px;
-            font-size: 1rem;
-            transition: all 0.2s;
-            min-height: 50px;
-            background-color: #f8fafc;
-        }
-
-        input:focus {
-            outline: none;
-            border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
-            background-color: white;
-        }
-
-        .btn {
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            padding: 1rem 1.5rem;
-            border-radius: 12px;
-            font-size: 1rem;
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            border: none;
-            min-height: 50px;
-            touch-action: manipulation;
-            gap: 0.5rem;
-        }
-
-        .btn-primary {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
-            color: white;
-            box-shadow: 0 4px 6px rgba(99, 102, 241, 0.3);
-        }
-
-        .btn-primary:active {
-            transform: translateY(2px);
-            box-shadow: 0 2px 4px rgba(99, 102, 241, 0.3);
-        }
-
-        .btn-secondary {
-            background: linear-gradient(135deg, var(--secondary) 0%, var(--secondary-hover) 100%);
-            color: white;
-            box-shadow: 0 4px 6px rgba(245, 158, 11, 0.3);
-        }
-
-        .btn-secondary:active {
-            transform: translateY(2px);
-            box-shadow: 0 2px 4px rgba(245, 158, 11, 0.3);
-        }
-
-        .btn-danger {
-            background: linear-gradient(135deg, var(--danger) 0%, var(--danger-hover) 100%);
-            color: white;
-            box-shadow: 0 4px 6px rgba(239, 68, 68, 0.3);
-        }
-
-        .btn-danger:active {
-            transform: translateY(2px);
-            box-shadow: 0 2px 4px rgba(239, 68, 68, 0.3);
-        }
-
-        .btn-success {
-            background: linear-gradient(135deg, var(--success) 0%, var(--success-hover) 100%);
-            color: white;
-            box-shadow: 0 4px 6px rgba(16, 185, 129, 0.3);
-        }
-
-        .btn-success:active {
-            transform: translateY(2px);
-            box-shadow: 0 2px 4px rgba(16, 185, 129, 0.3);
-        }
-
-        .btn-group {
-            display: flex;
-            gap: 0.75rem;
-            flex-wrap: wrap;
-        }
-
-        .mode-selector, .edition-selector {
-            display: flex;
-            flex-direction: column;
-            gap: 0.75rem;
-            margin-bottom: 1.5rem;
-        }
-
-        .mode-btn, .edition-btn {
-            padding: 1rem;
-            text-align: center;
-            border-radius: 12px;
-            background-color: #f1f5f9;
-            color: var(--gray);
-            font-weight: 600;
-            cursor: pointer;
-            transition: all 0.2s;
-            min-height: 50px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 2px solid transparent;
-        }
-
-        .mode-btn.active, .edition-btn.active {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-hover) 100%);
-            color: white;
-            box-shadow: 0 4px 6px rgba(99, 102, 241, 0.3);
-            border-color: var(--primary);
-        }
-
-        .mode-btn:active, .edition-btn:active {
-            transform: translateY(2px);
-        }
-
-        .character-controls {
-            margin-top: 1.5rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid #e2e8f0;
-        }
-
-        .character-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 1rem;
-            margin: 1.5rem 0;
-            max-height: 400px;
-            overflow-y: auto;
-            padding: 0.5rem;
-            -webkit-overflow-scrolling: touch;
-        }
-
-        .character-option {
-            padding: 1rem;
-            border-radius: 12px;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-        }
-
-        .character-btn {
-            flex: 1;
-            padding: 1rem;
-            border-radius: 12px;
-            color: white;
-            font-weight: 500;
-            cursor: pointer;
-            transition: all 0.2s;
-            border: none;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.75rem;
-            background-color: inherit;
-            min-height: 180px;
-        }
-
-        .character-btn:active {
-            transform: scale(0.98);
-        }
-
-        .character-btn.selected {
-            box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.7);
-            background-color: rgba(255, 255, 255, 0.1);
-            transform: scale(0.95);
-        }
-
-        .character-image {
-            width: 80px;
-            height: 80px;
-            border-radius: 12px;
-            object-fit: cover;
-            border: 3px solid rgba(255, 255, 255, 0.3);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-        }
-
-        .character-name {
-            font-size: 1rem;
-            font-weight: 600;
-            text-align: center;
-        }
-
-        .results-container {
-            margin-top: 0;
-            padding-bottom: env(safe-area-inset-bottom);
-        }
-
-        .results-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 1.5rem;
-            margin-top: 1rem;
-        }
-
-        .player-result {
-            padding: 1.5rem;
-            border-radius: 16px;
-            font-weight: 500;
-            color: white;
-            display: flex;
-            flex-direction: column;
-            gap: 1rem;
-            box-shadow: var(--shadow-md);
-            align-items: center;
-            text-align: center;
-            transition: transform 0.2s;
-        }
-
-        .player-result:active {
-            transform: scale(0.98);
-        }
-
-        .player-name {
-            font-size: 1.25rem;
-            font-weight: 700;
-        }
-
-        .player-color {
-            font-size: 1rem;
-            font-weight: 600;
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            background-color: rgba(0, 0, 0, 0.2);
-        }
-
-        .player-character {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 0.75rem;
-        }
-
-        .player-character-image {
-            width: 100px;
-            height: 100px;
-            border-radius: 12px;
-            object-fit: cover;
-            border: 4px solid rgba(255, 255, 255, 0.4);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-        }
-
-        .player-character-name {
-            font-size: 1.125rem;
-            font-weight: 600;
-        }
-
-        .hidden {
-            display: none;
-        }
-
-        /* Collapsible section styles */
-        .collapsible {
-            margin-top: 1rem;
-        }
-
-        .collapsible-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 1rem;
-            background-color: #f1f5f9;
-            border-radius: 12px;
-            cursor: pointer;
-            transition: all 0.2s;
-            min-height: 50px;
-            border: 2px solid transparent;
-        }
-
-        .collapsible-header:active {
-            background-color: #e2e8f0;
-        }
-
-        .collapsible-header h3 {
-            margin: 0;
-            font-size: 1rem;
-            font-weight: 600;
-            color: var(--dark);
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-        }
-
-        .collapsible-icon {
-            transition: transform 0.3s ease;
-        }
-
-        .collapsible-icon.collapsed {
-            transform: rotate(-90deg);
-        }
-
-        .collapsible-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease-out;
-        }
-
-        .collapsible-content-inner {
-            padding: 1rem 0;
-        }
-
-        .action-buttons {
-            margin-top: 1.5rem;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-
-        /* iOS specific adjustments */
-        @supports (-webkit-touch-callout: none) {
-            input, select, textarea {
-                font-size: 16px; /* Prevents zoom on focus in iOS */
-            }
-        }
-
-        /* Responsive adjustments for iPad */
-        @media (max-width: 1024px) {
-            .sidebar {
-                position: fixed;
-                left: 0;
-                top: 0;
-                bottom: 0;
-                z-index: 100;
-                transform: translateX(-100%);
-                transition: transform 0.3s ease;
-                width: 80%;
-                max-width: 300px;
-            }
-            
-            .sidebar.active {
-                transform: translateX(0);
-                box-shadow: 10px 0 20px rgba(0, 0, 0, 0.15);
-            }
-            
-            .main-content {
-                width: 100%;
-            }
-            
-            .player-grid {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-
-        @media (max-width: 768px) {
-            .sidebar, .main-content {
-                padding: 1rem;
-            }
-            
-            .player-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            .character-image {
-                width: 70px;
-                height: 70px;
-            }
-            
-            .player-character-image {
-                width: 80px;
-                height: 80px;
-            }
-            
-            .results-grid {
-                grid-template-columns: 1fr;
-            }
-            
-            header {
-                padding: 1rem;
-            }
-            
-            h1 {
-                font-size: 1.4rem;
-            }
-            
-            .subtitle {
-                font-size: 0.85rem;
-            }
-        }
-
-        @media (max-width: 480px) {
-            .btn-group {
-                flex-direction: column;
-            }
-            
-            .btn {
-                width: 100%;
-            }
-            
-            .mode-selector, .edition-selector {
-                flex-direction: row;
-                flex-wrap: wrap;
-            }
-            
-            .mode-btn, .edition-btn {
-                flex: 1;
-                min-width: 120px;
-            }
-        }
-
-        /* Overlay for sidebar on mobile */
-        .overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            right: 0;
-            bottom: 0;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 99;
-        }
-        
-        .overlay.active {
-            display: block;
-        }
-
-        /* Add some space at the bottom for iOS home indicator */
-        .ios-home-indicator {
-            height: env(safe-area-inset-bottom);
-            background-color: transparent;
-            width: 100%;
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#111827">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Game Utilities">
+  <title>Game Utilities</title>
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="apple-touch-icon" href="./assets/icons/apple-touch-icon.png">
+  <style>
+    :root {
+      --bg: #0b1220;
+      --bg-2: #111827;
+      --card: rgba(17, 24, 39, 0.78);
+      --card-border: rgba(255,255,255,0.08);
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --accent: #6366f1;
+      --accent-2: #22c55e;
+      --shadow: 0 20px 50px rgba(0,0,0,0.28);
+      --radius: 22px;
+    }
+    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+    html, body { margin: 0; min-height: 100%; }
+    body {
+      font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(99,102,241,0.22), transparent 28%),
+        radial-gradient(circle at top right, rgba(34,197,94,0.18), transparent 22%),
+        linear-gradient(180deg, #0b1220 0%, #0f172a 100%);
+      color: var(--text);
+    }
+    .page {
+      min-height: 100dvh;
+      padding: max(20px, env(safe-area-inset-top)) 16px max(20px, env(safe-area-inset-bottom)) 16px;
+      display: flex;
+      align-items: stretch;
+      justify-content: center;
+    }
+    .shell {
+      width: min(100%, 960px);
+      display: grid;
+      gap: 18px;
+      align-content: start;
+    }
+    .hero, .card, .install-note {
+      background: var(--card);
+      border: 1px solid var(--card-border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(16px);
+    }
+    .hero {
+      padding: 24px 20px;
+    }
+    .eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      border: 1px solid rgba(255,255,255,0.1);
+      border-radius: 999px;
+      padding: 8px 12px;
+      color: #cbd5e1;
+      font-size: 0.85rem;
+      margin-bottom: 16px;
+      background: rgba(255,255,255,0.04);
+    }
+    h1 {
+      margin: 0 0 10px;
+      font-size: clamp(2rem, 6vw, 3.4rem);
+      line-height: 1.02;
+      letter-spacing: -0.03em;
+    }
+    .subtitle {
+      margin: 0;
+      color: var(--muted);
+      font-size: 1rem;
+      line-height: 1.55;
+      max-width: 62ch;
+    }
+    .grid {
+      display: grid;
+      gap: 16px;
+      grid-template-columns: 1fr;
+    }
+    .card {
+      padding: 18px;
+      display: grid;
+      gap: 16px;
+    }
+    .card-top {
+      display: flex;
+      gap: 14px;
+      align-items: center;
+    }
+    .icon {
+      width: 56px;
+      height: 56px;
+      border-radius: 18px;
+      display: grid;
+      place-items: center;
+      font-size: 1.6rem;
+      font-weight: 700;
+      flex: 0 0 56px;
+      background: linear-gradient(135deg, rgba(99,102,241,0.26), rgba(99,102,241,0.1));
+      border: 1px solid rgba(99,102,241,0.35);
+    }
+    .icon.green {
+      background: linear-gradient(135deg, rgba(34,197,94,0.22), rgba(34,197,94,0.1));
+      border-color: rgba(34,197,94,0.32);
+    }
+    .meta h2 {
+      margin: 0 0 4px;
+      font-size: 1.15rem;
+    }
+    .meta p {
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.45;
+      font-size: 0.95rem;
+    }
+    .features {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .feature {
+      font-size: 0.8rem;
+      color: #dbeafe;
+      padding: 7px 10px;
+      border-radius: 999px;
+      background: rgba(99,102,241,0.14);
+      border: 1px solid rgba(99,102,241,0.22);
+    }
+    .feature.green {
+      color: #dcfce7;
+      background: rgba(34,197,94,0.14);
+      border-color: rgba(34,197,94,0.22);
+    }
+    .actions {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .btn {
+      appearance: none;
+      border: 0;
+      border-radius: 16px;
+      padding: 14px 18px;
+      font-weight: 700;
+      font-size: 1rem;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 52px;
+      cursor: pointer;
+    }
+    .btn.primary {
+      background: linear-gradient(135deg, #6366f1, #4f46e5);
+      color: white;
+      box-shadow: 0 12px 30px rgba(79, 70, 229, 0.32);
+      flex: 1 1 220px;
+    }
+    .btn.secondary {
+      background: rgba(255,255,255,0.06);
+      color: white;
+      border: 1px solid rgba(255,255,255,0.1);
+      flex: 1 1 220px;
+    }
+    .install-note {
+      padding: 16px 18px;
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.5;
+    }
+    .footer {
+      text-align: center;
+      color: #64748b;
+      font-size: 0.82rem;
+      padding: 4px 0 2px;
+    }
+    @media (min-width: 760px) {
+      .hero { padding: 30px; }
+      .grid { grid-template-columns: 1fr 1fr; }
+      .card { min-height: 100%; }
+    }
+  </style>
 </head>
 <body>
-    <div class="app-container">
-        <header>
-            <div class="header-content">
-                <button class="menu-toggle" onclick="toggleSidebar()">
-                    <i class="fas fa-bars"></i>
-                </button>
-                <div class="header-title">
-                    <h1>Player Assignment Tool</h1>
-                    <p class="subtitle">Assign colors and characters to players</p>
-                </div>
+  <main class="page">
+    <section class="shell">
+      <section class="hero">
+        <div class="eyebrow">Board game utilities</div>
+        <h1>Choose a game tool.</h1>
+        <p class="subtitle">
+          A mobile-first launcher for quick access to your utilities. The Betrayal character assignment tool is preserved as its own page, and the Rummikub turn counter is included as a separate utility.
+        </p>
+      </section>
+
+      <section class="grid">
+        <article class="card">
+          <div class="card-top">
+            <div class="icon">BH</div>
+            <div class="meta">
+              <h2>Betrayal at House on the Hill</h2>
+              <p>Your current player assignment utility moved to its own page with no gameplay functionality changes.</p>
             </div>
-        </header>
+          </div>
+          <div class="features">
+            <span class="feature">Existing tool preserved</span>
+            <span class="feature">Mobile access</span>
+            <span class="feature">Direct launch</span>
+          </div>
+          <div class="actions">
+            <a class="btn primary" href="./utilities/betrayal/">Open Betrayal utility</a>
+          </div>
+        </article>
 
-        <div class="content-area">
-            <div class="overlay" id="overlay" onclick="toggleSidebar()"></div>
-            
-            <div class="sidebar" id="sidebar">
-                <div class="card">
-                    <h2 class="card-title">
-                        <i class="fas fa-gamepad"></i>
-                        Game Edition
-                    </h2>
-                    <div class="edition-selector">
-                        <div id="edition2Btn" class="edition-btn active" onclick="setEdition(2)">
-                            <i class="fas fa-2"></i>
-                            <span>nd Edition</span>
-                        </div>
-                        <div id="edition3Btn" class="edition-btn" onclick="setEdition(3)">
-                            <i class="fas fa-3"></i>
-                            <span>rd Edition</span>
-                        </div>
-                    </div>
-                </div>
+        <article class="card">
+          <div class="card-top">
+            <div class="icon green">R</div>
+            <div class="meta">
+              <h2>Rummikub Turn Counter</h2>
+              <p>Phone-friendly turn timer with large touch targets, seating layout, turn order, fullscreen play view, and tap-to-pass flow.</p>
             </div>
+          </div>
+          <div class="features">
+            <span class="feature green">Up to 4 players</span>
+            <span class="feature green">Custom turn time</span>
+            <span class="feature green">Seat + order setup</span>
+          </div>
+          <div class="actions">
+            <a class="btn primary" href="./utilities/rummikub-turn-counter/">Open Rummikub utility</a>
+          </div>
+        </article>
+      </section>
 
-            <div class="main-content">
-                <div class="card">
-                    <h2 class="card-title">
-                        <i class="fas fa-users"></i>
-                        Player Information
-                    </h2>
-                    <div class="collapsible">
-                        <div class="collapsible-header" onclick="toggleCollapsible('playerInfoCollapsible')">
-                            <h3>
-                                <i class="fas"></i>
-                                Player Input Fields
-                            </h3>
-                            <svg class="collapsible-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                <polyline points="18 15 12 9 6 15"></polyline>
-                            </svg>
-                        </div>
-                        <div id="playerInfoCollapsible" class="collapsible-content" style="max-height: 1000px;">
-                            <div class="collapsible-content-inner">
-                                <div class="player-grid">
-                                    <div class="input-group">
-                                        <label for="player1">
-                                            <i class="fas fa-user"></i>
-                                            Player 1
-                                        </label>
-                                        <input type="text" id="player1" placeholder="Enter name">
-                                    </div>
-                                    <div class="input-group">
-                                        <label for="player2">
-                                            <i class="fas fa-user"></i>
-                                            Player 2
-                                        </label>
-                                        <input type="text" id="player2" placeholder="Enter name">
-                                    </div>
-                                    <div class="input-group">
-                                        <label for="player3">
-                                            <i class="fas fa-user"></i>
-                                            Player 3
-                                        </label>
-                                        <input type="text" id="player3" placeholder="Enter name">
-                                    </div>
-                                    <div class="input-group">
-                                        <label for="player4">
-                                            <i class="fas fa-user"></i>
-                                            Player 4
-                                        </label>
-                                        <input type="text" id="player4" placeholder="Enter name">
-                                    </div>
-                                    <div class="input-group">
-                                        <label for="player5">
-                                            <i class="fas fa-user"></i>
-                                            Player 5
-                                        </label>
-                                        <input type="text" id="player5" placeholder="Enter name">
-                                    </div>
-                                    <div class="input-group">
-                                        <label for="player6">
-                                            <i class="fas fa-user"></i>
-                                            Player 6
-                                        </label>
-                                        <input type="text" id="player6" placeholder="Enter name">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="action-buttons">
-                        <div id="colorsOnlyControls">
-                            <button class="btn btn-primary" onclick="assignColors()">
-                                <i class="fas fa-palette"></i>
-                                Assign Colors
-                            </button>
-                        </div>
+      <section class="install-note" id="installNote">
+        Install hint: on iPhone or iPad, open the share sheet in Safari and choose <strong>Add to Home Screen</strong>. On Chrome or Edge, use the browser install option when it appears.
+      </section>
 
-                        <div id="colorsAndCharsControlsMain" class="hidden">
-                            <button class="btn btn-primary" onclick="assignBoth()">
-                                <i class="fas fa-user-plus"></i>
-                                Assign Colors & Characters
-                            </button>
-                        </div>
-                    </div>
-                </div>
+      <div class="footer">Static GitHub Pages site • root launcher + utility pages</div>
+    </section>
+  </main>
 
-                <div class="card">
-                    <h2 class="card-title">
-                        <i class="fas fa-cog"></i>
-                        Assignment Settings
-                    </h2>
-                    <div class="mode-selector">
-                        <div id="colorsOnlyBtn" class="mode-btn active" onclick="setMode('colorsOnly')">
-                            <i class="fas fa-palette"></i> Colors Only
-                        </div>
-                        <div id="colorsAndCharsBtn" class="mode-btn" onclick="setMode('colorsAndChars')">
-                            <i class="fas fa-user"></i> Colors & Characters
-                        </div>
-                    </div>
-
-                    <div id="colorsAndCharsControls" class="hidden">
-                        <div class="character-controls">
-                            <div class="collapsible">
-                                <div class="collapsible-header" onclick="toggleCollapsible('characterOptionsCollapsible')">
-                                    <h3>
-                                        <i class="fas"></i>
-                                        Character Options
-                                    </h3>
-                                    <svg class="collapsible-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                        <polyline points="18 15 12 9 6 15"></polyline>
-                                    </svg>
-                                </div>
-                                <div id="characterOptionsCollapsible" class="collapsible-content" style="max-height: 1000px;">
-                                    <div class="collapsible-content-inner">
-                                        <p>Select specific characters to force their assignment (optional):</p>
-                                        <div id="characterOptions" class="character-grid"></div>
-                                        <div class="btn-group">
-                                            <button class="btn btn-secondary" onclick="toggleAllCharacters()">
-                                                <i class="fas fa-check-square"></i>
-                                                Toggle All
-                                            </button>
-                                            <button class="btn btn-danger" onclick="resetCharacterOptions()">
-                                                <i class="fas fa-undo"></i>
-                                                Reset All
-                                            </button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <div class="card results-container">
-                    <h2 class="card-title">
-                        <i class="fas fa-clipboard-list"></i>
-                        Assignment Results
-                    </h2>
-                    <div id="results" class="results-grid"></div>
-                </div>
-            </div>
-        </div>
-        <div class="ios-home-indicator"></div>
-    </div>
-
-    <script>
-        // Game edition data with image URLs
-        const editions = {
-            2: {
-                'Red': {
-                    characters: [
-                        { name: 'Ox Bellows', image: 'https://i.imgur.com/RLxb978.png' },
-                        { name: 'Darrin "Flash" Williams', image: 'https://i.imgur.com/JNxBLxE.png' }
-                    ],
-                    bgColor: '#8a484f',
-                    textColor: '#ffffff'
-                },
-                'Blue': {
-                    characters: [
-                        { name: 'Madam Zostra', image: 'https://i.imgur.com/zd96zE2.png' },
-                        { name: 'Vivian Lopez', image: 'https://i.imgur.com/kxZkehg.png' }
-                    ],
-                    bgColor: '#416880',
-                    textColor: '#ffffff'
-                },
-                'Green': {
-                    characters: [
-                        { name: 'Brandon Jaspers', image: 'https://i.imgur.com/ybmLZBq.png' },
-                        { name: 'Peter Akimoto', image: 'https://i.imgur.com/pU5i0fz.png' }
-                    ],
-                    bgColor: '#679d7b',
-                    textColor: '#ffffff'
-                },
-                'White': {
-                    characters: [
-                        { name: 'Father Rhinehardt', image: 'https://i.imgur.com/6cGy1HI.png' },
-                        { name: 'Professor Longfellow', image: 'https://i.imgur.com/hJWH47N.png' }
-                    ],
-                    bgColor: '#e8eadd',
-                    textColor: '#1e293b'
-                },
-                'Purple': {
-                    characters: [
-                        { name: 'Jenny LeClerc', image: 'https://i.imgur.com/3oRygh3.png' },
-                        { name: 'Heather Granville', image: 'https://i.imgur.com/3UEyErb.png' }
-                    ],
-                    bgColor: '#9b4e76',
-                    textColor: '#ffffff'
-                },
-                'Yellow': {
-                    characters: [
-                        { name: 'Zoe Ingstrom', image: 'https://i.imgur.com/bmKJVj0.png' },
-                        { name: 'Missy Dubourde', image: 'https://i.imgur.com/FQGWzqa.png' }
-                    ],
-                    bgColor: '#daba64',
-                    textColor: '#ffffff'
-                }
-            },
-            3: {
-                'Red': {
-                    characters: [
-                        { name: 'Josef "Brosef" Hooper', image: 'https://i.imgur.com/GovLJnu.png' },
-                        { name: 'Oliver Swift', image: 'https://i.imgur.com/HEidqJ3.png' }
-                    ],
-                    bgColor: '#a13332',
-                    textColor: '#ffffff'
-                },
-                'Blue': {
-                    characters: [
-                        { name: 'Stephanie Richter', image: 'https://i.imgur.com/75dQhh6.png' },
-                        { name: 'Persephone Puleri', image: 'https://i.imgur.com/bG1xhCe.png' }
-                    ],
-                    bgColor: '#316693',
-                    textColor: '#ffffff'
-                },
-                'Green': {
-                    characters: [
-                        { name: 'Sammy Angler', image: 'https://i.imgur.com/HyWeXa4.png' },
-                        { name: 'Jaden Jones', image: 'https://i.imgur.com/p4wxRiI.png' }
-                    ],
-                    bgColor: '#37a272',
-                    textColor: '#ffffff'
-                },
-                'White': {
-                    characters: [
-                        { name: 'Father Warren Leung', image: 'https://i.imgur.com/vmu9yWn.png' },
-                        { name: 'Dan Nguyen, M.D.', image: 'https://i.imgur.com/ahp0M3W.png' }
-                    ],
-                    bgColor: '#faf6f3',
-                    textColor: '#000000'
-                },
-                'Purple': {
-                    characters: [
-                        { name: 'Michelle Monroe', image: 'https://i.imgur.com/sqqBj0w.png' },
-                        { name: 'Brittani "Beat Box" Bowen', image: 'https://i.imgur.com/KAUZfEi.png' }
-                    ],
-                    bgColor: '#603f7f',
-                    textColor: '#ffffff'
-                },
-                'Yellow': {
-                    characters: [
-                        { name: 'Isa Valencia', image: 'https://i.imgur.com/zFRPyt3.png' },
-                        { name: 'Anita Hernandez', image: 'https://i.imgur.com/4k1mmBH.png' }
-                    ],
-                    bgColor: '#c99529',
-                    textColor: '#1e293b'
-                }
-            }
-        };
-
-        // Current game state
-        let currentEdition = 2;
-        let currentMode = 'colorsOnly';
-        let characterSelections = {};
-        let colorData = JSON.parse(JSON.stringify(editions[2])); // Initialize with 2nd edition
-        let sidebarCollapsed = true;
-        
-        // Toggle sidebar visibility
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            const overlay = document.getElementById('overlay');
-            sidebarCollapsed = !sidebarCollapsed;
-            sidebar.classList.toggle('active', !sidebarCollapsed);
-            overlay.classList.toggle('active', !sidebarCollapsed);
-        }
-        
-        // Toggle collapsible section
-        function toggleCollapsible(id) {
-            const content = document.getElementById(id);
-            const icon = content.previousElementSibling.querySelector('.collapsible-icon');
-            
-            if (content.style.maxHeight) {
-                content.style.maxHeight = null;
-                icon.classList.add('collapsed');
-            } else {
-                content.style.maxHeight = content.scrollHeight + "px";
-                icon.classList.remove('collapsed');
-            }
-        }
-        
-        // Set the game edition
-        function setEdition(edition) {
-            currentEdition = edition;
-            document.getElementById('edition2Btn').classList.toggle('active', edition === 2);
-            document.getElementById('edition3Btn').classList.toggle('active', edition === 3);
-            
-            // Update color data with the selected edition
-            colorData = JSON.parse(JSON.stringify(editions[edition]));
-            
-            // Reset character selections
-            resetCharacterOptions();
-            
-            // Reinitialize character options if in Colors & Characters mode
-            if (currentMode === 'colorsAndChars') {
-                initializeCharacterOptions();
-            }
-            
-            // Close sidebar on mobile after selection
-            if (window.innerWidth <= 1024) {
-                toggleSidebar();
-            }
-        }
-        
-        // Set the assignment mode
-        function setMode(mode) {
-            currentMode = mode;
-            document.getElementById('colorsOnlyBtn').classList.toggle('active', mode === 'colorsOnly');
-            document.getElementById('colorsAndCharsBtn').classList.toggle('active', mode === 'colorsAndChars');
-            document.getElementById('colorsOnlyControls').classList.toggle('hidden', mode !== 'colorsOnly');
-            document.getElementById('colorsAndCharsControls').classList.toggle('hidden', mode !== 'colorsAndChars');
-            document.getElementById('colorsAndCharsControlsMain').classList.toggle('hidden', mode !== 'colorsAndChars');
-            
-            // Initialize character options if switching to Colors & Characters mode
-            if (mode === 'colorsAndChars') {
-                initializeCharacterOptions();
-            }
-        }
-        
-        // Initialize character options
-        function initializeCharacterOptions() {
-            const container = document.getElementById('characterOptions');
-            container.innerHTML = '';
-            
-            // Reset assigned flags
-            for (const color in colorData) {
-                colorData[color].assigned = false;
-            }
-            
-            // Reset character selections
-            characterSelections = {};
-            
-            for (const [color, data] of Object.entries(colorData)) {
-                const optionDiv = document.createElement('div');
-                optionDiv.className = 'character-option';
-                optionDiv.style.backgroundColor = data.bgColor;
-                optionDiv.style.color = data.textColor;
-                
-                const colorLabel = document.createElement('div');
-                colorLabel.textContent = color;
-                colorLabel.style.fontWeight = '600';
-                colorLabel.style.textAlign = 'center';
-                optionDiv.appendChild(colorLabel);
-                
-                // Create buttons for each character
-                data.characters.forEach((character, index) => {
-                    const charBtn = document.createElement('button');
-                    charBtn.className = 'character-btn';
-                    charBtn.style.color = data.textColor;
-                    charBtn.onclick = () => toggleCharacter(color, index);
-                    
-                    // Add character image
-                    const charImage = document.createElement('img');
-                    charImage.className = 'character-image';
-                    charImage.src = character.image;
-                    charImage.alt = character.name;
-                    
-                    // Add character name
-                    const charName = document.createElement('div');
-                    charName.className = 'character-name';
-                    charName.textContent = character.name;
-                    
-                    charBtn.appendChild(charImage);
-                    charBtn.appendChild(charName);
-                    optionDiv.appendChild(charBtn);
-                });
-                
-                container.appendChild(optionDiv);
-                
-                // Initialize selections
-                characterSelections[color] = {
-                    0: false,
-                    1: false
-                };
-            }
-        }
-        
-        // Toggle a specific character
-        function toggleCharacter(color, index) {
-            characterSelections[color][index] = !characterSelections[color][index];
-            updateButtonStyles();
-        }
-        
-        // Toggle all characters
-        function toggleAllCharacters() {
-            for (const color in characterSelections) {
-                characterSelections[color][0] = !characterSelections[color][0];
-                characterSelections[color][1] = !characterSelections[color][1];
-            }
-            updateButtonStyles();
-        }
-        
-        // Reset all character selections
-        function resetCharacterOptions() {
-            characterSelections = {};
-            for (const color in colorData) {
-                characterSelections[color] = {
-                    0: false,
-                    1: false
-                };
-            }
-            updateButtonStyles();
-        }
-        
-        // Update button styles based on selection state
-        function updateButtonStyles() {
-            const buttons = document.querySelectorAll('.character-btn');
-            if (buttons.length === 0) return;
-            
-            let buttonIndex = 0;
-            for (const color in characterSelections) {
-                for (let i = 0; i < 2; i++) {
-                    buttons[buttonIndex].classList.toggle('selected', characterSelections[color][i]);
-                    buttonIndex++;
-                }
-            }
-        }
-        
-        // Get player names from input fields
-        function getPlayerNames() {
-            const players = [];
-            for (let i = 1; i <= 6; i++) {
-                const playerName = document.getElementById(`player${i}`).value.trim();
-                if (playerName) {
-                    players.push(playerName);
-                }
-            }
-            return players;
-        }
-        
-        // Validate player count
-        function validatePlayerCount(players) {
-            if (players.length === 0) {
-                alert('Please enter at least one player name.');
-                return false;
-            }
-            
-            if (players.length > Object.keys(colorData).length) {
-                alert(`You can only assign up to ${Object.keys(colorData).length} players (one per color).`);
-                return false;
-            }
-            
-            return true;
-        }
-        
-        // Assign only colors
-        function assignColors() {
-            // Reset assigned flags
-            for (const color in colorData) {
-                colorData[color].assigned = false;
-            }
-            
-            const players = getPlayerNames();
-            if (!validatePlayerCount(players)) return;
-            
-            // Shuffle colors
-            const colors = Object.keys(colorData);
-            const shuffledColors = [...colors].sort(() => 0.5 - Math.random());
-            
-            // Assign colors to players
-            const assignments = [];
-            for (let i = 0; i < players.length; i++) {
-                const color = shuffledColors[i];
-                assignments.push({
-                    name: players[i],
-                    color: color,
-                    bgColor: colorData[color].bgColor,
-                    textColor: colorData[color].textColor
-                });
-            }
-            
-            // Display results
-            displayResults(assignments, false);
-        }
-        
-        // Assign both colors and characters
-        function assignBoth() {
-            // Reset assigned flags
-            for (const color in colorData) {
-                colorData[color].assigned = false;
-            }
-            
-            const players = getPlayerNames();
-            if (!validatePlayerCount(players)) return;
-            
-            // Prepare available colors and characters
-            const availableColors = [];
-            for (const [color, data] of Object.entries(colorData)) {
-                // Check if a specific character is selected for this color
-                let forcedCharacter = null;
-                if (characterSelections[color][0] && !characterSelections[color][1]) {
-                    forcedCharacter = data.characters[0];
-                } else if (characterSelections[color][1] && !characterSelections[color][0]) {
-                    forcedCharacter = data.characters[1];
-                }
-                
-                availableColors.push({
-                    color: color,
-                    characters: data.characters,
-                    bgColor: data.bgColor,
-                    textColor: data.textColor,
-                    forcedCharacter: forcedCharacter
-                });
-            }
-            
-            // Shuffle available colors
-            const shuffledColors = [...availableColors].sort(() => 0.5 - Math.random());
-            
-            // Assign colors and characters to players
-            const assignments = [];
-            for (let i = 0; i < players.length; i++) {
-                const colorInfo = shuffledColors[i];
-                let character;
-                
-                if (colorInfo.forcedCharacter) {
-                    character = colorInfo.forcedCharacter;
-                } else {
-                    // Randomly select one of the two characters
-                    character = colorInfo.characters[Math.floor(Math.random() * 2)];
-                }
-                
-                assignments.push({
-                    name: players[i],
-                    color: colorInfo.color,
-                    character: character.name,
-                    characterImage: character.image,
-                    bgColor: colorInfo.bgColor,
-                    textColor: colorInfo.textColor
-                });
-            }
-            
-            // Display results
-            displayResults(assignments, true);
-        }
-        
-        // Display assignment results
-        function displayResults(assignments, showCharacters) {
-            const resultsDiv = document.getElementById('results');
-            resultsDiv.innerHTML = '';
-            
-            assignments.forEach(assignment => {
-                const playerCard = document.createElement('div');
-                playerCard.className = 'player-result';
-                playerCard.style.backgroundColor = assignment.bgColor;
-                playerCard.style.color = assignment.textColor;
-                
-                // Player name
-                const nameDiv = document.createElement('div');
-                nameDiv.className = 'player-name';
-                nameDiv.textContent = assignment.name;
-                playerCard.appendChild(nameDiv);
-                
-                // Color indicator
-                const colorDiv = document.createElement('div');
-                colorDiv.className = 'player-color';
-                colorDiv.textContent = assignment.color;
-                playerCard.appendChild(colorDiv);
-                
-                if (showCharacters) {
-                    // Character display
-                    const charContainer = document.createElement('div');
-                    charContainer.className = 'player-character';
-                    
-                    // Character image
-                    const charImage = document.createElement('img');
-                    charImage.className = 'player-character-image';
-                    charImage.src = assignment.characterImage;
-                    charImage.alt = assignment.character;
-                    
-                    // Character name
-                    const charName = document.createElement('div');
-                    charName.className = 'player-character-name';
-                    charName.textContent = assignment.character;
-                    
-                    charContainer.appendChild(charImage);
-                    charContainer.appendChild(charName);
-                    playerCard.appendChild(charContainer);
-                }
-                
-                resultsDiv.appendChild(playerCard);
-            });
-            
-            // Scroll to results
-            resultsDiv.scrollIntoView({ behavior: 'smooth' });
-        }
-        
-        // Initialize the page
-        window.onload = function() {
-            setEdition(2);
-            setMode('colorsOnly');
-            
-            // Set up responsive behavior
-            function handleResize() {
-                const sidebar = document.getElementById('sidebar');
-                const overlay = document.getElementById('overlay');
-                
-                if (window.innerWidth > 1024) {
-                    // Desktop view - sidebar always visible
-                    sidebar.classList.add('active');
-                    overlay.classList.remove('active');
-                    sidebarCollapsed = false;
-                } else {
-                    // Mobile/tablet view - sidebar hidden by default
-                    sidebar.classList.remove('active');
-                    overlay.classList.remove('active');
-                    sidebarCollapsed = true;
-                }
-            }
-            
-            // Initial call
-            handleResize();
-            
-            // Add event listener
-            window.addEventListener('resize', handleResize);
-        };
-    </script>
+  <script>
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('./sw.js').catch(function () {});
+      });
+    }
+  </script>
 </body>
 </html>
