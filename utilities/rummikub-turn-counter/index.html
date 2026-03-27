@@ -31,8 +31,19 @@
       --radius: 24px;
       --shadow: 0 18px 50px rgba(0,0,0,0.34);
     }
-    * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-    html, body { margin: 0; min-height: 100%; background: var(--bg); color: var(--text); }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      background: var(--bg);
+      color: var(--text);
+    }
+
     body {
       font-family: Inter, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
       user-select: none;
@@ -42,7 +53,11 @@
         radial-gradient(circle at 84% 14%, rgba(139,92,246,0.18), transparent 24%),
         linear-gradient(180deg, #020617 0%, #0f172a 58%, #111827 100%);
     }
-    button, input, select { font: inherit; }
+
+    button, input, select {
+      font: inherit;
+    }
+
     .app {
       min-height: 100dvh;
       padding: max(14px, env(safe-area-inset-top)) 14px max(96px, calc(18px + env(safe-area-inset-bottom))) 14px;
@@ -52,6 +67,7 @@
       align-content: start;
       gap: 14px;
     }
+
     .panel {
       background: var(--panel);
       border: 1px solid var(--line);
@@ -59,11 +75,13 @@
       box-shadow: var(--shadow);
       backdrop-filter: blur(18px);
     }
+
     .header {
       padding: 18px;
       display: grid;
       gap: 12px;
     }
+
     .header-top {
       display: flex;
       align-items: center;
@@ -71,6 +89,7 @@
       gap: 12px;
       flex-wrap: wrap;
     }
+
     .back-link, .pill {
       min-height: 44px;
       display: inline-flex;
@@ -84,17 +103,20 @@
       text-decoration: none;
       font-weight: 700;
     }
+
     .pill {
       color: var(--muted-2);
       appearance: none;
       cursor: pointer;
     }
+
     h1 {
       margin: 0;
       font-size: clamp(1.7rem, 5vw, 2.6rem);
       letter-spacing: -0.04em;
       line-height: 1.02;
     }
+
     .sub {
       margin: 0;
       color: var(--muted);
@@ -102,15 +124,18 @@
       font-size: 0.98rem;
       max-width: 72ch;
     }
+
     .config {
       display: grid;
       gap: 14px;
     }
+
     .section {
       padding: 16px;
       display: grid;
       gap: 16px;
     }
+
     .section-head {
       display: flex;
       justify-content: space-between;
@@ -118,21 +143,25 @@
       gap: 12px;
       flex-wrap: wrap;
     }
+
     .section-title {
       margin: 0;
       font-size: 1.03rem;
       letter-spacing: -0.02em;
     }
+
     .section-note {
       color: var(--muted);
       font-size: 0.9rem;
       line-height: 1.4;
     }
+
     .time-grid {
       display: grid;
       grid-template-columns: repeat(2, minmax(0, 1fr));
       gap: 12px;
     }
+
     label {
       display: grid;
       gap: 8px;
@@ -140,7 +169,8 @@
       font-weight: 700;
       font-size: 0.92rem;
     }
-    input[type="text"], input[type="number"], select {
+
+    input[type="text"], select {
       width: 100%;
       min-height: 56px;
       border-radius: 16px;
@@ -151,14 +181,20 @@
       font-size: 1rem;
       appearance: none;
     }
+
     select option {
       color: #0f172a;
     }
-    input::placeholder { color: #94a3b8; }
+
+    input::placeholder {
+      color: #94a3b8;
+    }
+
     .players {
       display: grid;
       gap: 12px;
     }
+
     .player-card {
       padding: 14px;
       border-radius: 20px;
@@ -168,28 +204,34 @@
       gap: 12px;
       box-shadow: inset 0 1px 0 rgba(255,255,255,0.03);
     }
+
     .player-card[data-enabled="false"] {
       opacity: 0.82;
     }
+
     .player-head {
       display: flex;
       align-items: center;
       justify-content: space-between;
       gap: 12px;
     }
+
     .player-title-wrap {
       display: grid;
       gap: 4px;
     }
+
     .player-title {
       font-size: 1rem;
       font-weight: 800;
       letter-spacing: -0.02em;
     }
+
     .player-meta {
       font-size: 0.84rem;
       color: var(--muted);
     }
+
     .toggle {
       position: relative;
       width: 62px;
@@ -198,11 +240,13 @@
       align-items: center;
       flex: 0 0 auto;
     }
+
     .toggle input {
       position: absolute;
       opacity: 0;
       inset: 0;
     }
+
     .toggle .track {
       width: 100%;
       height: 100%;
@@ -211,6 +255,7 @@
       border: 1px solid rgba(255,255,255,0.10);
       transition: .2s ease;
     }
+
     .toggle .thumb {
       position: absolute;
       left: 4px;
@@ -221,28 +266,34 @@
       transition: .2s ease;
       box-shadow: 0 4px 10px rgba(0,0,0,0.28);
     }
+
     .toggle input:checked + .track {
       background: rgba(34,197,94,0.34);
       border-color: rgba(34,197,94,0.44);
     }
+
     .toggle input:checked ~ .thumb {
       transform: translateX(26px);
     }
+
     .player-grid {
       display: grid;
       grid-template-columns: minmax(0,1fr) 150px;
       gap: 12px;
       align-items: start;
     }
+
     .seat-controls {
       display: grid;
       gap: 10px;
     }
+
     .seat-picker-label {
       font-size: 0.9rem;
       color: #dbeafe;
       font-weight: 700;
     }
+
     .seat-picker {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -250,6 +301,7 @@
       gap: 8px;
       align-items: stretch;
     }
+
     .seat-button {
       min-height: 58px;
       border-radius: 16px;
@@ -260,19 +312,19 @@
       display: grid;
       place-items: center;
       padding: 10px;
+      cursor: pointer;
     }
+
     .seat-button[aria-pressed="true"] {
       background: linear-gradient(135deg, rgba(56,189,248,0.24), rgba(139,92,246,0.22));
       border-color: rgba(56,189,248,0.46);
       color: white;
       box-shadow: 0 10px 22px rgba(56,189,248,0.18);
     }
-    .seat-button[disabled] {
-      opacity: 0.42;
-      cursor: not-allowed;
-    }
+
     .seat-top-btn { grid-column: 2; grid-row: 1; }
     .seat-left-btn { grid-column: 1; grid-row: 2; }
+
     .seat-center-btn {
       grid-column: 2;
       grid-row: 2;
@@ -285,13 +337,16 @@
       text-align: center;
       line-height: 1.2;
     }
+
     .seat-right-btn { grid-column: 3; grid-row: 2; }
     .seat-bottom-btn { grid-column: 2; grid-row: 3; }
+
     .turn-quick {
       display: grid;
       grid-template-columns: repeat(4, minmax(0, 1fr));
       gap: 8px;
     }
+
     .turn-chip {
       min-height: 48px;
       border-radius: 14px;
@@ -299,17 +354,21 @@
       background: rgba(255,255,255,0.05);
       color: #e2e8f0;
       font-weight: 800;
+      cursor: pointer;
     }
+
     .turn-chip.active {
       background: rgba(255,255,255,0.14);
       border-color: rgba(255,255,255,0.20);
       color: white;
     }
+
     .preview-shell {
       display: grid;
       gap: 14px;
       align-content: start;
     }
+
     .preview-board {
       aspect-ratio: 1 / 1;
       width: min(100%, 430px);
@@ -323,6 +382,7 @@
       overflow: hidden;
       box-shadow: inset 0 1px 0 rgba(255,255,255,0.04);
     }
+
     .preview-center {
       position: absolute;
       inset: 29%;
@@ -337,6 +397,7 @@
       font-size: 0.9rem;
       line-height: 1.35;
     }
+
     .seat-chip {
       position: absolute;
       min-width: 120px;
@@ -354,15 +415,18 @@
       color: #e0f2fe;
       box-shadow: 0 12px 24px rgba(2,6,23,0.22);
     }
+
     .seat-chip small {
       font-size: 0.78rem;
       color: #e2e8f0;
       font-weight: 700;
     }
+
     .seat-top { top: 12px; left: 50%; transform: translateX(-50%); }
     .seat-right { right: 12px; top: 50%; transform: translateY(-50%); }
     .seat-bottom { bottom: 12px; left: 50%; transform: translateX(-50%); }
     .seat-left { left: 12px; top: 50%; transform: translateY(-50%); }
+
     .legend {
       display: grid;
       gap: 8px;
@@ -370,13 +434,18 @@
       font-size: 0.9rem;
       line-height: 1.45;
     }
-    .legend strong { color: var(--muted-2); }
+
+    .legend strong {
+      color: var(--muted-2);
+    }
+
     .status {
       min-height: 24px;
       color: #fde68a;
       font-size: 0.92rem;
       font-weight: 800;
     }
+
     .actions {
       position: sticky;
       bottom: max(10px, env(safe-area-inset-bottom));
@@ -389,6 +458,7 @@
       border-radius: 20px;
       backdrop-filter: blur(16px);
     }
+
     button {
       appearance: none;
       border: 0;
@@ -400,23 +470,27 @@
       cursor: pointer;
       letter-spacing: -0.02em;
     }
+
     .primary {
       background: linear-gradient(135deg, var(--accent), var(--accent-2));
       color: white;
       flex: 1 1 240px;
       box-shadow: 0 16px 36px rgba(56,189,248,0.20);
     }
+
     .secondary {
       background: rgba(255,255,255,0.06);
       color: white;
       border: 1px solid rgba(255,255,255,0.10);
       flex: 1 1 160px;
     }
+
     .danger {
       background: rgba(239,68,68,0.15);
       color: #fecaca;
       border: 1px solid rgba(239,68,68,0.28);
     }
+
     .button-row {
       display: flex;
       gap: 10px;
@@ -440,7 +514,11 @@
       flex-direction: column;
       padding: max(12px, env(safe-area-inset-top)) 12px max(12px, env(safe-area-inset-bottom)) 12px;
     }
-    .play.active { display: flex; }
+
+    .play.active {
+      display: flex;
+    }
+
     .play-topbar {
       display: flex;
       justify-content: space-between;
@@ -449,6 +527,7 @@
       z-index: 3;
       flex-wrap: wrap;
     }
+
     .play-stage {
       flex: 1;
       display: grid;
@@ -456,6 +535,7 @@
       overflow: hidden;
       position: relative;
     }
+
     .orientation {
       width: min(92vw, 620px);
       height: min(78dvh, 760px);
@@ -464,6 +544,7 @@
       transition: transform 0.35s ease;
       will-change: transform;
     }
+
     .timer-button {
       width: 100%;
       height: 100%;
@@ -478,7 +559,9 @@
       padding: 28px 18px;
       position: relative;
       overflow: hidden;
+      cursor: pointer;
     }
+
     .timer-button::before {
       content: "";
       position: absolute;
@@ -488,6 +571,7 @@
         radial-gradient(circle at bottom, rgba(139,92,246,0.14), transparent 24%);
       pointer-events: none;
     }
+
     .current-player {
       position: relative;
       z-index: 1;
@@ -497,6 +581,7 @@
       letter-spacing: -0.04em;
       padding: 0 8px;
     }
+
     .seat-name {
       position: relative;
       z-index: 1;
@@ -506,6 +591,7 @@
       letter-spacing: 0.12em;
       font-size: 0.78rem;
     }
+
     .timer-value {
       position: relative;
       z-index: 1;
@@ -515,6 +601,7 @@
       letter-spacing: -0.06em;
       font-variant-numeric: tabular-nums;
     }
+
     .timer-caption {
       position: relative;
       z-index: 1;
@@ -523,7 +610,10 @@
       line-height: 1.45;
       max-width: 26ch;
     }
-    .expired { color: #fca5a5; }
+
+    .expired {
+      color: #fca5a5;
+    }
 
     .stats-modal {
       position: fixed;
@@ -535,9 +625,11 @@
       padding: 18px;
       place-items: center;
     }
+
     .stats-modal.active {
       display: grid;
     }
+
     .stats-card {
       width: min(100%, 920px);
       max-height: min(88dvh, 900px);
@@ -550,6 +642,7 @@
       display: grid;
       gap: 16px;
     }
+
     .stats-header {
       display: flex;
       align-items: start;
@@ -557,21 +650,25 @@
       gap: 12px;
       flex-wrap: wrap;
     }
+
     .stats-header h2 {
       margin: 0;
       font-size: 1.3rem;
       letter-spacing: -0.03em;
     }
+
     .stats-sub {
       color: var(--muted);
       font-size: 0.92rem;
       line-height: 1.45;
     }
+
     .stats-grid {
       display: grid;
       gap: 12px;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
     }
+
     .stat-player-card {
       border-radius: 20px;
       border: 1px solid rgba(255,255,255,0.08);
@@ -580,19 +677,23 @@
       display: grid;
       gap: 12px;
     }
+
     .stat-player-name {
       font-size: 1.04rem;
       font-weight: 900;
       letter-spacing: -0.02em;
     }
+
     .stat-meta {
       color: var(--muted);
       font-size: 0.88rem;
     }
+
     .stat-list {
       display: grid;
       gap: 8px;
     }
+
     .stat-row {
       display: flex;
       justify-content: space-between;
@@ -602,23 +703,28 @@
       border-bottom: 1px solid rgba(255,255,255,0.06);
       font-size: 0.94rem;
     }
+
     .stat-row:last-child {
       border-bottom: 0;
       padding-bottom: 0;
     }
+
     .stat-row strong {
       font-size: 1rem;
       letter-spacing: -0.02em;
     }
+
     .turn-history {
       display: grid;
       gap: 8px;
     }
+
     .history-chip-wrap {
       display: flex;
       flex-wrap: wrap;
       gap: 8px;
     }
+
     .history-chip {
       border-radius: 999px;
       padding: 8px 12px;
@@ -634,20 +740,56 @@
         align-items: start;
       }
     }
+
     @media (max-width: 720px) {
-      .player-grid { grid-template-columns: 1fr; }
-      .seat-chip { min-width: 104px; max-width: 116px; }
+      .player-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .seat-chip {
+        min-width: 104px;
+        max-width: 116px;
+      }
     }
+
     @media (max-width: 520px) {
-      .app { padding-left: 10px; padding-right: 10px; }
-      .time-grid { grid-template-columns: 1fr; }
-      .turn-quick { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-      .actions { position: sticky; }
-      .orientation { width: 94vw; height: min(76dvh, 640px); }
-      .current-player { font-size: 1.4rem; }
-      .preview-center { inset: 31%; }
-      .stats-modal { padding: 10px; }
-      .stats-card { padding: 14px; }
+      .app {
+        padding-left: 10px;
+        padding-right: 10px;
+      }
+
+      .time-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .turn-quick {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+      }
+
+      .actions {
+        position: sticky;
+      }
+
+      .orientation {
+        width: 94vw;
+        height: min(76dvh, 640px);
+      }
+
+      .current-player {
+        font-size: 1.4rem;
+      }
+
+      .preview-center {
+        inset: 31%;
+      }
+
+      .stats-modal {
+        padding: 10px;
+      }
+
+      .stats-card {
+        padding: 14px;
+      }
     }
   </style>
 </head>
@@ -694,7 +836,7 @@
         <div class="status" id="statusText"></div>
 
         <div class="actions">
-          <button class="primary" id="startBtn">Start turn counter</button>
+          <button class="primary" id="startBtn" type="button">Start turn counter</button>
           <button class="secondary" id="showStatsBtn" type="button">Show stats</button>
           <button class="secondary" id="restoreBtn" type="button">Restore defaults</button>
         </div>
@@ -753,663 +895,666 @@
     </div>
   </section>
 
-<script>
-  const defaults = [
-    { enabled: true,  name: 'Player 1', seat: 'bottom', order: '1' },
-    { enabled: true,  name: 'Player 2', seat: 'left',   order: '2' },
-    { enabled: false, name: 'Player 3', seat: 'top',    order: '3' },
-    { enabled: false, name: 'Player 4', seat: 'right',  order: '4' }
-  ];
+  <script>
+    const defaults = [
+      { enabled: true,  name: 'Player 1', seat: 'bottom', order: '1' },
+      { enabled: true,  name: 'Player 2', seat: 'left',   order: '2' },
+      { enabled: false, name: 'Player 3', seat: 'top',    order: '3' },
+      { enabled: false, name: 'Player 4', seat: 'right',  order: '4' }
+    ];
 
-  const seatOptions = [
-    { value: 'top', label: 'Top' },
-    { value: 'right', label: 'Right' },
-    { value: 'bottom', label: 'Bottom' },
-    { value: 'left', label: 'Left' }
-  ];
+    const seatOptions = [
+      { value: 'top', label: 'Top' },
+      { value: 'right', label: 'Right' },
+      { value: 'bottom', label: 'Bottom' },
+      { value: 'left', label: 'Left' }
+    ];
 
-  const rotationBySeat = {
-    bottom: '0deg',
-    left: '90deg',
-    top: '180deg',
-    right: '-90deg'
-  };
+    const rotationBySeat = {
+      bottom: '0deg',
+      left: '90deg',
+      top: '180deg',
+      right: '-90deg'
+    };
 
-  const minuteOptions = Array.from({ length: 31 }, (_, i) => i);
-  const secondOptions = [0, 5, 10, 15, 20, 30, 45, 50, 55];
+    const minuteOptions = Array.from({ length: 31 }, (_, i) => i);
+    const secondOptions = [0, 5, 10, 15, 20, 30, 45, 50, 55];
 
-  const state = {
-    totalSeconds: 120,
-    remainingSeconds: 120,
-    players: structuredClone(defaults),
-    activePlayers: [],
-    currentIndex: 0,
-    intervalId: null,
-    dingPlayed: false,
-    zeroSoundPlayed: false,
-    stats: {},
-    gameStarted: false
-  };
+    const state = {
+      totalSeconds: 120,
+      remainingSeconds: 120,
+      players: structuredClone(defaults),
+      activePlayers: [],
+      currentIndex: 0,
+      intervalId: null,
+      dingPlayed: false,
+      zeroSoundPlayed: false,
+      stats: {},
+      gameStarted: false
+    };
 
-  const els = {
-    playersContainer: document.getElementById('playersContainer'),
-    previewBoard: document.getElementById('previewBoard'),
-    statusText: document.getElementById('statusText'),
-    minutesInput: document.getElementById('minutesInput'),
-    secondsInput: document.getElementById('secondsInput'),
-    startBtn: document.getElementById('startBtn'),
-    showStatsBtn: document.getElementById('showStatsBtn'),
-    restoreBtn: document.getElementById('restoreBtn'),
-    playView: document.getElementById('playView'),
-    resetBtn: document.getElementById('resetBtn'),
-    advanceBtn: document.getElementById('advanceBtn'),
-    timerValue: document.getElementById('timerValue'),
-    currentPlayerName: document.getElementById('currentPlayerName'),
-    currentSeatName: document.getElementById('currentSeatName'),
-    turnInfo: document.getElementById('turnInfo'),
-    timerCaption: document.getElementById('timerCaption'),
-    orientationStage: document.getElementById('orientationStage'),
-    playStatsBtn: document.getElementById('playStatsBtn'),
-    statsModal: document.getElementById('statsModal'),
-    statsGrid: document.getElementById('statsGrid'),
-    closeStatsBtn: document.getElementById('closeStatsBtn')
-  };
+    const els = {
+      playersContainer: document.getElementById('playersContainer'),
+      previewBoard: document.getElementById('previewBoard'),
+      statusText: document.getElementById('statusText'),
+      minutesInput: document.getElementById('minutesInput'),
+      secondsInput: document.getElementById('secondsInput'),
+      startBtn: document.getElementById('startBtn'),
+      showStatsBtn: document.getElementById('showStatsBtn'),
+      restoreBtn: document.getElementById('restoreBtn'),
+      playView: document.getElementById('playView'),
+      resetBtn: document.getElementById('resetBtn'),
+      advanceBtn: document.getElementById('advanceBtn'),
+      timerValue: document.getElementById('timerValue'),
+      currentPlayerName: document.getElementById('currentPlayerName'),
+      currentSeatName: document.getElementById('currentSeatName'),
+      turnInfo: document.getElementById('turnInfo'),
+      timerCaption: document.getElementById('timerCaption'),
+      orientationStage: document.getElementById('orientationStage'),
+      playStatsBtn: document.getElementById('playStatsBtn'),
+      statsModal: document.getElementById('statsModal'),
+      statsGrid: document.getElementById('statsGrid'),
+      closeStatsBtn: document.getElementById('closeStatsBtn')
+    };
 
-  let audioCtx = null;
+    let audioCtx = null;
 
-  function ensureAudioContext() {
-    try {
-      if (!audioCtx) {
-        const AudioContextClass = window.AudioContext || window.webkitAudioContext;
-        if (!AudioContextClass) return null;
-        audioCtx = new AudioContextClass();
+    function ensureAudioContext() {
+      try {
+        if (!audioCtx) {
+          const AudioContextClass = window.AudioContext || window.webkitAudioContext;
+          if (!AudioContextClass) return null;
+          audioCtx = new AudioContextClass();
+        }
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume().catch(() => {});
+        }
+        return audioCtx;
+      } catch {
+        return null;
       }
-      if (audioCtx.state === 'suspended') {
-        audioCtx.resume();
-      }
-      return audioCtx;
-    } catch {
-      return null;
     }
-  }
 
-  function playTone(frequency, duration, type = 'sine', volume = 0.12) {
-    const ctx = ensureAudioContext();
-    if (!ctx) return;
+    function playTone(frequency, duration, type = 'sine', volume = 0.12) {
+      const ctx = ensureAudioContext();
+      if (!ctx) return;
 
-    const oscillator = ctx.createOscillator();
-    const gainNode = ctx.createGain();
+      const oscillator = ctx.createOscillator();
+      const gainNode = ctx.createGain();
 
-    oscillator.type = type;
-    oscillator.frequency.setValueAtTime(frequency, ctx.currentTime);
+      oscillator.type = type;
+      oscillator.frequency.setValueAtTime(frequency, ctx.currentTime);
 
-    gainNode.gain.setValueAtTime(0.0001, ctx.currentTime);
-    gainNode.gain.linearRampToValueAtTime(volume, ctx.currentTime + 0.01);
-    gainNode.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration);
+      gainNode.gain.setValueAtTime(0.0001, ctx.currentTime);
+      gainNode.gain.linearRampToValueAtTime(volume, ctx.currentTime + 0.01);
+      gainNode.gain.exponentialRampToValueAtTime(0.0001, ctx.currentTime + duration);
 
-    oscillator.connect(gainNode);
-    gainNode.connect(ctx.destination);
+      oscillator.connect(gainNode);
+      gainNode.connect(ctx.destination);
 
-    oscillator.start(ctx.currentTime);
-    oscillator.stop(ctx.currentTime + duration + 0.03);
-  }
+      oscillator.start(ctx.currentTime);
+      oscillator.stop(ctx.currentTime + duration + 0.03);
+    }
 
-  function playTenSecondDing() {
-    playTone(1046.5, 0.16, 'sine', 0.12);
-    setTimeout(() => playTone(1318.5, 0.18, 'sine', 0.10), 120);
-  }
+    function playTenSecondDing() {
+      playTone(1046.5, 0.16, 'sine', 0.12);
+      setTimeout(() => playTone(1318.5, 0.18, 'sine', 0.10), 120);
+    }
 
-  function playZeroBuzzer() {
-    playTone(180, 0.30, 'sawtooth', 0.16);
-    setTimeout(() => playTone(140, 0.35, 'square', 0.14), 140);
-    setTimeout(() => playTone(110, 0.42, 'square', 0.12), 280);
-  }
+    function playZeroBuzzer() {
+      playTone(180, 0.30, 'sawtooth', 0.16);
+      setTimeout(() => playTone(140, 0.35, 'square', 0.14), 140);
+      setTimeout(() => playTone(110, 0.42, 'square', 0.12), 280);
+    }
 
-  function formatTime(totalSeconds) {
-    const seconds = Math.max(0, Number(totalSeconds) || 0);
-    const mins = Math.floor(seconds / 60);
-    const secs = seconds % 60;
-    return `${mins}:${String(secs).padStart(2, '0')}`;
-  }
+    function formatTime(totalSeconds) {
+      const seconds = Math.max(0, Number(totalSeconds) || 0);
+      const mins = Math.floor(seconds / 60);
+      const secs = seconds % 60;
+      return `${mins}:${String(secs).padStart(2, '0')}`;
+    }
 
-  function formatAverage(totalSeconds) {
-    const seconds = Math.max(0, Number(totalSeconds) || 0);
-    const mins = Math.floor(seconds / 60);
-    const secs = Math.round(seconds % 60);
-    return `${mins}:${String(secs).padStart(2, '0')}`;
-  }
+    function formatAverage(totalSeconds) {
+      const seconds = Math.max(0, Number(totalSeconds) || 0);
+      const mins = Math.floor(seconds / 60);
+      const secs = Math.round(seconds % 60);
+      return `${mins}:${String(secs).padStart(2, '0')}`;
+    }
 
-  function populateTimeSelectors() {
-    els.minutesInput.innerHTML = minuteOptions
-      .map(value => `<option value="${value}">${value} min</option>`)
-      .join('');
+    function populateTimeSelectors() {
+      els.minutesInput.innerHTML = minuteOptions
+        .map(value => `<option value="${value}">${value} min</option>`)
+        .join('');
 
-    els.secondsInput.innerHTML = secondOptions
-      .map(value => `<option value="${value}">${value} sec</option>`)
-      .join('');
+      els.secondsInput.innerHTML = secondOptions
+        .map(value => `<option value="${value}">${value} sec</option>`)
+        .join('');
 
-    els.minutesInput.value = '2';
-    els.secondsInput.value = '0';
-  }
+      els.minutesInput.value = '2';
+      els.secondsInput.value = '0';
+    }
 
-  function seatPickerMarkup(index, selectedSeat) {
-    return `
-      <div class="seat-picker" role="group" aria-label="Seat selection for player ${index + 1}">
-        <button type="button" class="seat-button seat-top-btn" data-seat-button="true" data-index="${index}" data-seat-value="top" aria-pressed="${selectedSeat === 'top'}">Top</button>
-        <button type="button" class="seat-button seat-left-btn" data-seat-button="true" data-index="${index}" data-seat-value="left" aria-pressed="${selectedSeat === 'left'}">Left</button>
-        <div class="seat-button seat-center-btn" aria-hidden="true">Table</div>
-        <button type="button" class="seat-button seat-right-btn" data-seat-button="true" data-index="${index}" data-seat-value="right" aria-pressed="${selectedSeat === 'right'}">Right</button>
-        <button type="button" class="seat-button seat-bottom-btn" data-seat-button="true" data-index="${index}" data-seat-value="bottom" aria-pressed="${selectedSeat === 'bottom'}">Bottom</button>
-      </div>
-    `;
-  }
-
-  function playerCardTemplate(player, index) {
-    return `
-      <div class="player-card" data-enabled="${player.enabled}">
-        <div class="player-head">
-          <div class="player-title-wrap">
-            <div class="player-title">Player slot ${index + 1}</div>
-            <div class="player-meta">${player.enabled ? 'Active in this round' : 'Disabled'}</div>
-          </div>
-          <label class="toggle" aria-label="Enable player ${index + 1}">
-            <input type="checkbox" data-field="enabled" data-index="${index}" ${player.enabled ? 'checked' : ''}>
-            <span class="track"></span>
-            <span class="thumb"></span>
-          </label>
+    function seatPickerMarkup(index, selectedSeat) {
+      return `
+        <div class="seat-picker" role="group" aria-label="Seat selection for player ${index + 1}">
+          <button type="button" class="seat-button seat-top-btn" data-seat-button="true" data-index="${index}" data-seat-value="top" aria-pressed="${selectedSeat === 'top'}">Top</button>
+          <button type="button" class="seat-button seat-left-btn" data-seat-button="true" data-index="${index}" data-seat-value="left" aria-pressed="${selectedSeat === 'left'}">Left</button>
+          <div class="seat-button seat-center-btn" aria-hidden="true">Table</div>
+          <button type="button" class="seat-button seat-right-btn" data-seat-button="true" data-index="${index}" data-seat-value="right" aria-pressed="${selectedSeat === 'right'}">Right</button>
+          <button type="button" class="seat-button seat-bottom-btn" data-seat-button="true" data-index="${index}" data-seat-value="bottom" aria-pressed="${selectedSeat === 'bottom'}">Bottom</button>
         </div>
+      `;
+    }
 
-        <label>
-          Name
-          <input type="text" maxlength="20" data-field="name" data-index="${index}" value="${escapeHtml(player.name)}" placeholder="Player ${index + 1}">
-        </label>
-
-        <div class="player-grid">
-          <div class="seat-controls">
-            <div class="seat-picker-label">Where is this player sitting?</div>
-            ${seatPickerMarkup(index, player.seat)}
-            <label>
-              Seat
-              <select data-field="seat" data-index="${index}">
-                ${seatOptions.map(option => `<option value="${option.value}" ${player.seat === option.value ? 'selected' : ''}>${option.label}</option>`).join('')}
-              </select>
+    function playerCardTemplate(player, index) {
+      return `
+        <div class="player-card" data-enabled="${player.enabled}">
+          <div class="player-head">
+            <div class="player-title-wrap">
+              <div class="player-title">Player slot ${index + 1}</div>
+              <div class="player-meta">${player.enabled ? 'Active in this round' : 'Disabled'}</div>
+            </div>
+            <label class="toggle" aria-label="Enable player ${index + 1}">
+              <input type="checkbox" data-field="enabled" data-index="${index}" ${player.enabled ? 'checked' : ''}>
+              <span class="track"></span>
+              <span class="thumb"></span>
             </label>
           </div>
 
-          <div class="seat-controls">
-            <label>
-              Turn order
-              <select data-field="order" data-index="${index}">
-                <option value="1" ${player.order === '1' ? 'selected' : ''}>1st</option>
-                <option value="2" ${player.order === '2' ? 'selected' : ''}>2nd</option>
-                <option value="3" ${player.order === '3' ? 'selected' : ''}>3rd</option>
-                <option value="4" ${player.order === '4' ? 'selected' : ''}>4th</option>
-              </select>
-            </label>
-            <div class="turn-quick" role="group" aria-label="Quick turn order selection for player ${index + 1}">
-              ${[1,2,3,4].map(num => `<button type="button" class="turn-chip ${String(num) === String(player.order) ? 'active' : ''}" data-order-button="true" data-index="${index}" data-order-value="${num}">${num}</button>`).join('')}
+          <label>
+            Name
+            <input type="text" maxlength="20" data-field="name" data-index="${index}" value="${escapeHtml(player.name)}" placeholder="Player ${index + 1}">
+          </label>
+
+          <div class="player-grid">
+            <div class="seat-controls">
+              <div class="seat-picker-label">Where is this player sitting?</div>
+              ${seatPickerMarkup(index, player.seat)}
+              <label>
+                Seat
+                <select data-field="seat" data-index="${index}">
+                  ${seatOptions.map(option => `<option value="${option.value}" ${player.seat === option.value ? 'selected' : ''}>${option.label}</option>`).join('')}
+                </select>
+              </label>
+            </div>
+
+            <div class="seat-controls">
+              <label>
+                Turn order
+                <select data-field="order" data-index="${index}">
+                  <option value="1" ${player.order === '1' ? 'selected' : ''}>1st</option>
+                  <option value="2" ${player.order === '2' ? 'selected' : ''}>2nd</option>
+                  <option value="3" ${player.order === '3' ? 'selected' : ''}>3rd</option>
+                  <option value="4" ${player.order === '4' ? 'selected' : ''}>4th</option>
+                </select>
+              </label>
+              <div class="turn-quick" role="group" aria-label="Quick turn order selection for player ${index + 1}">
+                ${[1,2,3,4].map(num => `<button type="button" class="turn-chip ${String(num) === String(player.order) ? 'active' : ''}" data-order-button="true" data-index="${index}" data-order-value="${num}">${num}</button>`).join('')}
+              </div>
             </div>
           </div>
         </div>
-      </div>
-    `;
-  }
-
-  function escapeHtml(value) {
-    return String(value)
-      .replaceAll('&', '&amp;')
-      .replaceAll('<', '&lt;')
-      .replaceAll('>', '&gt;')
-      .replaceAll('"', '&quot;')
-      .replaceAll("'", '&#39;');
-  }
-
-  function renderPlayers() {
-    els.playersContainer.innerHTML = state.players.map(playerCardTemplate).join('');
-    bindPlayerInputs();
-    renderPreview();
-    validateConfig();
-  }
-
-  function bindPlayerInputs() {
-    els.playersContainer.querySelectorAll('[data-field]').forEach(control => {
-      control.addEventListener('input', handleConfigChange);
-      control.addEventListener('change', handleConfigChange);
-    });
-
-    els.playersContainer.querySelectorAll('[data-seat-button="true"]').forEach(button => {
-      button.addEventListener('click', () => {
-        const index = Number(button.dataset.index);
-        const seat = button.dataset.seatValue;
-        state.players[index].seat = seat;
-        renderPlayers();
-        persistState();
-      });
-    });
-
-    els.playersContainer.querySelectorAll('[data-order-button="true"]').forEach(button => {
-      button.addEventListener('click', () => {
-        const index = Number(button.dataset.index);
-        const order = button.dataset.orderValue;
-        state.players[index].order = String(order);
-        renderPlayers();
-        persistState();
-      });
-    });
-  }
-
-  function handleConfigChange(event) {
-    const index = Number(event.target.dataset.index);
-    const field = event.target.dataset.field;
-    const value = field === 'enabled' ? event.target.checked : event.target.value;
-    state.players[index][field] = value;
-    renderPreview();
-    validateConfig();
-    persistState();
-  }
-
-  function renderPreview() {
-    const activePlayers = getActivePlayers({ allowInvalid: true });
-    const seats = { top: null, right: null, bottom: null, left: null };
-    activePlayers.forEach(player => { seats[player.seat] = player; });
-
-    const seatMarkup = Object.entries(seats).map(([seat, player]) => {
-      if (!player) return '';
-      const orderText = `${ordinal(player.order)} turn`;
-      return `<div class="seat-chip seat-${seat}">${escapeHtml(player.name || 'Player')}<br><small>${orderText}</small></div>`;
-    }).join('');
-
-    els.previewBoard.innerHTML = `<div class="preview-center">Seat positions shown around the table.<br>Turn order appears on each active player.</div>${seatMarkup}`;
-  }
-
-  function ordinal(value) {
-    const n = Number(value);
-    if (n === 1) return '1st';
-    if (n === 2) return '2nd';
-    if (n === 3) return '3rd';
-    return `${n}th`;
-  }
-
-  function titleCaseSeat(seat) {
-    return String(seat || '').charAt(0).toUpperCase() + String(seat || '').slice(1);
-  }
-
-  function getTurnSeconds() {
-    const mins = clamp(Number(els.minutesInput.value || 0), 0, 59);
-    const secs = clamp(Number(els.secondsInput.value || 0), 0, 59);
-    return mins * 60 + secs;
-  }
-
-  function clamp(value, min, max) {
-    return Math.min(max, Math.max(min, Number.isFinite(value) ? value : min));
-  }
-
-  function getActivePlayers({ allowInvalid = false } = {}) {
-    const players = state.players
-      .filter(player => player.enabled)
-      .map(player => ({
-        ...player,
-        name: (player.name || '').trim() || 'Player',
-        order: Number(player.order)
-      }));
-
-    if (allowInvalid) return players;
-    return players.sort((a, b) => a.order - b.order);
-  }
-
-  function validateConfig() {
-    const activePlayers = state.players.filter(player => player.enabled);
-    const totalSeconds = getTurnSeconds();
-
-    if (activePlayers.length === 0) {
-      setStatus('Enable at least one player.');
-      els.startBtn.disabled = true;
-      return false;
+      `;
     }
 
-    if (totalSeconds <= 0) {
-      setStatus('Turn time must be at least 1 second.');
-      els.startBtn.disabled = true;
-      return false;
+    function escapeHtml(value) {
+      return String(value)
+        .replaceAll('&', '&amp;')
+        .replaceAll('<', '&lt;')
+        .replaceAll('>', '&gt;')
+        .replaceAll('"', '&quot;')
+        .replaceAll("'", '&#39;');
     }
 
-    const seatSet = new Set();
-    const orderSet = new Set();
+    function renderPlayers() {
+      els.playersContainer.innerHTML = state.players.map(playerCardTemplate).join('');
+      bindPlayerInputs();
+      renderPreview();
+      validateConfig();
+    }
 
-    for (const player of activePlayers) {
-      if (seatSet.has(player.seat)) {
-        setStatus('Each active player needs a unique seat.');
+    function bindPlayerInputs() {
+      els.playersContainer.querySelectorAll('[data-field]').forEach(control => {
+        control.addEventListener('input', handleConfigChange);
+        control.addEventListener('change', handleConfigChange);
+      });
+
+      els.playersContainer.querySelectorAll('[data-seat-button="true"]').forEach(button => {
+        button.addEventListener('click', () => {
+          const index = Number(button.dataset.index);
+          const seat = button.dataset.seatValue;
+          state.players[index].seat = seat;
+          renderPlayers();
+          persistState();
+        });
+      });
+
+      els.playersContainer.querySelectorAll('[data-order-button="true"]').forEach(button => {
+        button.addEventListener('click', () => {
+          const index = Number(button.dataset.index);
+          const order = button.dataset.orderValue;
+          state.players[index].order = String(order);
+          renderPlayers();
+          persistState();
+        });
+      });
+    }
+
+    function handleConfigChange(event) {
+      const index = Number(event.target.dataset.index);
+      const field = event.target.dataset.field;
+      const value = field === 'enabled' ? event.target.checked : event.target.value;
+      state.players[index][field] = value;
+      renderPreview();
+      validateConfig();
+      persistState();
+    }
+
+    function renderPreview() {
+      const activePlayers = getActivePlayers({ allowInvalid: true });
+      const seats = { top: null, right: null, bottom: null, left: null };
+      activePlayers.forEach(player => { seats[player.seat] = player; });
+
+      const seatMarkup = Object.entries(seats).map(([seat, player]) => {
+        if (!player) return '';
+        const orderText = `${ordinal(player.order)} turn`;
+        return `<div class="seat-chip seat-${seat}">${escapeHtml(player.name || 'Player')}<br><small>${orderText}</small></div>`;
+      }).join('');
+
+      els.previewBoard.innerHTML = `<div class="preview-center">Seat positions shown around the table.<br>Turn order appears on each active player.</div>${seatMarkup}`;
+    }
+
+    function ordinal(value) {
+      const n = Number(value);
+      if (n === 1) return '1st';
+      if (n === 2) return '2nd';
+      if (n === 3) return '3rd';
+      return `${n}th`;
+    }
+
+    function titleCaseSeat(seat) {
+      return String(seat || '').charAt(0).toUpperCase() + String(seat || '').slice(1);
+    }
+
+    function getTurnSeconds() {
+      const mins = clamp(Number(els.minutesInput.value || 0), 0, 59);
+      const secs = clamp(Number(els.secondsInput.value || 0), 0, 59);
+      return mins * 60 + secs;
+    }
+
+    function clamp(value, min, max) {
+      return Math.min(max, Math.max(min, Number.isFinite(value) ? value : min));
+    }
+
+    function getActivePlayers({ allowInvalid = false } = {}) {
+      const players = state.players
+        .filter(player => player.enabled)
+        .map(player => ({
+          ...player,
+          name: (player.name || '').trim() || 'Player',
+          order: Number(player.order)
+        }));
+
+      if (allowInvalid) return players;
+      return players.sort((a, b) => a.order - b.order);
+    }
+
+    function validateConfig() {
+      const activePlayers = state.players.filter(player => player.enabled);
+      const totalSeconds = getTurnSeconds();
+
+      if (activePlayers.length === 0) {
+        setStatus('Enable at least one player.');
         els.startBtn.disabled = true;
         return false;
       }
-      seatSet.add(player.seat);
 
-      if (orderSet.has(player.order)) {
-        setStatus('Each active player needs a unique turn order.');
+      if (totalSeconds <= 0) {
+        setStatus('Turn time must be at least 1 second.');
         els.startBtn.disabled = true;
         return false;
       }
-      orderSet.add(player.order);
-    }
 
-    setStatus(`${activePlayers.length} player${activePlayers.length > 1 ? 's' : ''} ready.`);
-    els.startBtn.disabled = false;
-    return true;
-  }
+      const seatSet = new Set();
+      const orderSet = new Set();
 
-  function setStatus(message) {
-    els.statusText.textContent = message;
-  }
-
-  function playerKey(player) {
-    return `${player.name}__${player.seat}__${player.order}`;
-  }
-
-  function buildFreshStats(activePlayers) {
-    const stats = {};
-    activePlayers.forEach(player => {
-      const key = playerKey(player);
-      stats[key] = {
-        name: player.name,
-        seat: player.seat,
-        turns: 0,
-        totalSeconds: 0,
-        averageSeconds: 0,
-        longestSeconds: 0,
-        shortestSeconds: null,
-        lastTurnSeconds: 0,
-        durations: []
-      };
-    });
-    return stats;
-  }
-
-  function recordCurrentTurnStats() {
-    if (!state.gameStarted || !state.activePlayers.length) return;
-
-    const currentPlayer = state.activePlayers[state.currentIndex];
-    if (!currentPlayer) return;
-
-    const elapsed = Math.max(0, state.totalSeconds - state.remainingSeconds);
-    const key = playerKey(currentPlayer);
-
-    if (!state.stats[key]) {
-      state.stats[key] = {
-        name: currentPlayer.name,
-        seat: currentPlayer.seat,
-        turns: 0,
-        totalSeconds: 0,
-        averageSeconds: 0,
-        longestSeconds: 0,
-        shortestSeconds: null,
-        lastTurnSeconds: 0,
-        durations: []
-      };
-    }
-
-    const stats = state.stats[key];
-    stats.turns += 1;
-    stats.totalSeconds += elapsed;
-    stats.lastTurnSeconds = elapsed;
-    stats.longestSeconds = Math.max(stats.longestSeconds, elapsed);
-    stats.shortestSeconds = stats.shortestSeconds === null ? elapsed : Math.min(stats.shortestSeconds, elapsed);
-    stats.durations.push(elapsed);
-    stats.averageSeconds = stats.totalSeconds / stats.turns;
-
-    updateStatsButtons();
-  }
-
-  function totalRecordedTurns() {
-    return Object.values(state.stats).reduce((sum, player) => sum + player.turns, 0);
-  }
-
-  function updateStatsButtons() {
-    const turns = totalRecordedTurns();
-    const label = turns > 0 ? `Show stats (${turns})` : 'Show stats';
-    const playLabel = turns > 0 ? `Stats (${turns})` : 'Stats';
-
-    if (els.showStatsBtn) els.showStatsBtn.textContent = label;
-    if (els.playStatsBtn) els.playStatsBtn.textContent = playLabel;
-  }
-
-  function renderStats() {
-    const statEntries = Object.values(state.stats);
-
-    if (!statEntries.length) {
-      els.statsGrid.innerHTML = `
-        <div class="stat-player-card">
-          <div class="stat-player-name">No stats yet</div>
-          <div class="stat-meta">Complete at least one turn, then open stats again.</div>
-        </div>
-      `;
-      return;
-    }
-
-    els.statsGrid.innerHTML = statEntries.map(playerStats => {
-      const historyMarkup = playerStats.durations.length
-        ? playerStats.durations.map((seconds, index) =>
-            `<span class="history-chip">#${index + 1}: ${formatTime(seconds)}</span>`
-          ).join('')
-        : '<span class="history-chip">No completed turns yet</span>';
-
-      return `
-        <div class="stat-player-card">
-          <div>
-            <div class="stat-player-name">${escapeHtml(playerStats.name)}</div>
-            <div class="stat-meta">${titleCaseSeat(playerStats.seat)} seat</div>
-          </div>
-
-          <div class="stat-list">
-            <div class="stat-row"><span>Turns taken</span><strong>${playerStats.turns}</strong></div>
-            <div class="stat-row"><span>Total time</span><strong>${formatTime(playerStats.totalSeconds)}</strong></div>
-            <div class="stat-row"><span>Average turn</span><strong>${formatAverage(playerStats.averageSeconds)}</strong></div>
-            <div class="stat-row"><span>Last turn</span><strong>${formatTime(playerStats.lastTurnSeconds)}</strong></div>
-            <div class="stat-row"><span>Longest turn</span><strong>${formatTime(playerStats.longestSeconds)}</strong></div>
-            <div class="stat-row"><span>Shortest turn</span><strong>${formatTime(playerStats.shortestSeconds ?? 0)}</strong></div>
-          </div>
-
-          <div class="turn-history">
-            <div class="stat-meta">Turn history</div>
-            <div class="history-chip-wrap">${historyMarkup}</div>
-          </div>
-        </div>
-      `;
-    }).join('');
-  }
-
-  function showStats() {
-    renderStats();
-    els.statsModal.classList.add('active');
-    els.statsModal.setAttribute('aria-hidden', 'false');
-  }
-
-  function closeStats() {
-    els.statsModal.classList.remove('active');
-    els.statsModal.setAttribute('aria-hidden', 'true');
-  }
-
-  function startGame() {
-    if (!validateConfig()) return;
-
-    ensureAudioContext();
-
-    state.totalSeconds = getTurnSeconds();
-    state.remainingSeconds = state.totalSeconds;
-    state.activePlayers = getActivePlayers().sort((a, b) => a.order - b.order);
-    state.currentIndex = 0;
-    state.dingPlayed = false;
-    state.zeroSoundPlayed = false;
-    state.gameStarted = true;
-    state.stats = buildFreshStats(state.activePlayers);
-
-    updateStatsButtons();
-    updatePlayView();
-    els.playView.classList.add('active');
-    els.playView.setAttribute('aria-hidden', 'false');
-    startCountdown();
-    persistState();
-  }
-
-  function updatePlayView() {
-    const currentPlayer = state.activePlayers[state.currentIndex];
-    if (!currentPlayer) return;
-
-    els.currentPlayerName.textContent = currentPlayer.name;
-    els.currentSeatName.textContent = `${titleCaseSeat(currentPlayer.seat)} seat`;
-    els.turnInfo.textContent = `Turn ${state.currentIndex + 1} of ${state.activePlayers.length}`;
-    els.timerValue.textContent = formatTime(state.remainingSeconds);
-    els.timerValue.classList.toggle('expired', state.remainingSeconds === 0);
-    els.orientationStage.style.transform = `rotate(${rotationBySeat[currentPlayer.seat] || '0deg'})`;
-    const secondsText = formatTime(state.totalSeconds);
-
-    els.timerCaption.textContent = state.remainingSeconds === 0
-      ? 'Time is up. Tap to pass the turn and restart the timer.'
-      : `Tap to pass the turn early, or let the ${secondsText} timer run out before tapping.`;
-  }
-
-  function startCountdown() {
-    stopCountdown();
-
-    state.intervalId = window.setInterval(() => {
-      if (state.remainingSeconds > 0) {
-        state.remainingSeconds -= 1;
-
-        if (state.remainingSeconds === 10 && !state.dingPlayed) {
-          playTenSecondDing();
-          state.dingPlayed = true;
+      for (const player of activePlayers) {
+        if (seatSet.has(player.seat)) {
+          setStatus('Each active player needs a unique seat.');
+          els.startBtn.disabled = true;
+          return false;
         }
+        seatSet.add(player.seat);
 
-        if (state.remainingSeconds === 0 && !state.zeroSoundPlayed) {
-          playZeroBuzzer();
-          state.zeroSoundPlayed = true;
+        if (orderSet.has(player.order)) {
+          setStatus('Each active player needs a unique turn order.');
+          els.startBtn.disabled = true;
+          return false;
         }
+        orderSet.add(player.order);
       }
+
+      setStatus(`${activePlayers.length} player${activePlayers.length > 1 ? 's' : ''} ready.`);
+      els.startBtn.disabled = false;
+      return true;
+    }
+
+    function setStatus(message) {
+      els.statusText.textContent = message;
+    }
+
+    function playerKey(player) {
+      return `${player.name}__${player.seat}__${player.order}`;
+    }
+
+    function buildFreshStats(activePlayers) {
+      const stats = {};
+      activePlayers.forEach(player => {
+        const key = playerKey(player);
+        stats[key] = {
+          name: player.name,
+          seat: player.seat,
+          turns: 0,
+          totalSeconds: 0,
+          averageSeconds: 0,
+          longestSeconds: 0,
+          shortestSeconds: null,
+          lastTurnSeconds: 0,
+          durations: []
+        };
+      });
+      return stats;
+    }
+
+    function recordCurrentTurnStats() {
+      if (!state.gameStarted || !state.activePlayers.length) return;
+
+      const currentPlayer = state.activePlayers[state.currentIndex];
+      if (!currentPlayer) return;
+
+      const elapsed = Math.max(0, state.totalSeconds - state.remainingSeconds);
+      const key = playerKey(currentPlayer);
+
+      if (!state.stats[key]) {
+        state.stats[key] = {
+          name: currentPlayer.name,
+          seat: currentPlayer.seat,
+          turns: 0,
+          totalSeconds: 0,
+          averageSeconds: 0,
+          longestSeconds: 0,
+          shortestSeconds: null,
+          lastTurnSeconds: 0,
+          durations: []
+        };
+      }
+
+      const stats = state.stats[key];
+      stats.turns += 1;
+      stats.totalSeconds += elapsed;
+      stats.lastTurnSeconds = elapsed;
+      stats.longestSeconds = Math.max(stats.longestSeconds, elapsed);
+      stats.shortestSeconds = stats.shortestSeconds === null ? elapsed : Math.min(stats.shortestSeconds, elapsed);
+      stats.durations.push(elapsed);
+      stats.averageSeconds = stats.totalSeconds / stats.turns;
+
+      updateStatsButtons();
+    }
+
+    function totalRecordedTurns() {
+      return Object.values(state.stats).reduce((sum, player) => sum + player.turns, 0);
+    }
+
+    function updateStatsButtons() {
+      const turns = totalRecordedTurns();
+      els.showStatsBtn.textContent = turns > 0 ? `Show stats (${turns})` : 'Show stats';
+      els.playStatsBtn.textContent = turns > 0 ? `Stats (${turns})` : 'Stats';
+    }
+
+    function renderStats() {
+      const statEntries = Object.values(state.stats);
+
+      if (!statEntries.length) {
+        els.statsGrid.innerHTML = `
+          <div class="stat-player-card">
+            <div class="stat-player-name">No stats yet</div>
+            <div class="stat-meta">Complete at least one turn, then open stats again.</div>
+          </div>
+        `;
+        return;
+      }
+
+      els.statsGrid.innerHTML = statEntries.map(playerStats => {
+        const historyMarkup = playerStats.durations.length
+          ? playerStats.durations.map((seconds, index) =>
+              `<span class="history-chip">#${index + 1}: ${formatTime(seconds)}</span>`
+            ).join('')
+          : '<span class="history-chip">No completed turns yet</span>';
+
+        return `
+          <div class="stat-player-card">
+            <div>
+              <div class="stat-player-name">${escapeHtml(playerStats.name)}</div>
+              <div class="stat-meta">${titleCaseSeat(playerStats.seat)} seat</div>
+            </div>
+
+            <div class="stat-list">
+              <div class="stat-row"><span>Turns taken</span><strong>${playerStats.turns}</strong></div>
+              <div class="stat-row"><span>Total time</span><strong>${formatTime(playerStats.totalSeconds)}</strong></div>
+              <div class="stat-row"><span>Average turn</span><strong>${formatAverage(playerStats.averageSeconds)}</strong></div>
+              <div class="stat-row"><span>Last turn</span><strong>${formatTime(playerStats.lastTurnSeconds)}</strong></div>
+              <div class="stat-row"><span>Longest turn</span><strong>${formatTime(playerStats.longestSeconds)}</strong></div>
+              <div class="stat-row"><span>Shortest turn</span><strong>${formatTime(playerStats.shortestSeconds ?? 0)}</strong></div>
+            </div>
+
+            <div class="turn-history">
+              <div class="stat-meta">Turn history</div>
+              <div class="history-chip-wrap">${historyMarkup}</div>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    function showStats() {
+      renderStats();
+      els.statsModal.classList.add('active');
+      els.statsModal.setAttribute('aria-hidden', 'false');
+    }
+
+    function closeStats() {
+      els.statsModal.classList.remove('active');
+      els.statsModal.setAttribute('aria-hidden', 'true');
+    }
+
+    function startGame() {
+      if (!validateConfig()) return;
+
+      ensureAudioContext();
+
+      state.totalSeconds = getTurnSeconds();
+      state.remainingSeconds = state.totalSeconds;
+      state.activePlayers = getActivePlayers().sort((a, b) => a.order - b.order);
+      state.currentIndex = 0;
+      state.dingPlayed = false;
+      state.zeroSoundPlayed = false;
+      state.gameStarted = true;
+      state.stats = buildFreshStats(state.activePlayers);
+
+      updateStatsButtons();
+      updatePlayView();
+      els.playView.classList.add('active');
+      els.playView.setAttribute('aria-hidden', 'false');
+      startCountdown();
+      persistState();
+    }
+
+    function updatePlayView() {
+      const currentPlayer = state.activePlayers[state.currentIndex];
+      if (!currentPlayer) return;
+
+      els.currentPlayerName.textContent = currentPlayer.name;
+      els.currentSeatName.textContent = `${titleCaseSeat(currentPlayer.seat)} seat`;
+      els.turnInfo.textContent = `Turn ${state.currentIndex + 1} of ${state.activePlayers.length}`;
+      els.timerValue.textContent = formatTime(state.remainingSeconds);
+      els.timerValue.classList.toggle('expired', state.remainingSeconds === 0);
+      els.orientationStage.style.transform = `rotate(${rotationBySeat[currentPlayer.seat] || '0deg'})`;
+
+      const secondsText = formatTime(state.totalSeconds);
+      els.timerCaption.textContent = state.remainingSeconds === 0
+        ? 'Time is up. Tap to pass the turn and restart the timer.'
+        : `Tap to pass the turn early, or let the ${secondsText} timer run out before tapping.`;
+    }
+
+    function startCountdown() {
+      stopCountdown();
+
+      state.intervalId = window.setInterval(() => {
+        if (state.remainingSeconds > 0) {
+          state.remainingSeconds -= 1;
+
+          if (state.remainingSeconds === 10 && !state.dingPlayed) {
+            playTenSecondDing();
+            state.dingPlayed = true;
+          }
+
+          if (state.remainingSeconds === 0 && !state.zeroSoundPlayed) {
+            playZeroBuzzer();
+            state.zeroSoundPlayed = true;
+          }
+        }
+
+        updatePlayView();
+      }, 1000);
+    }
+
+    function stopCountdown() {
+      if (state.intervalId) {
+        window.clearInterval(state.intervalId);
+        state.intervalId = null;
+      }
+    }
+
+    function advanceTurn() {
+      if (!state.activePlayers.length || !state.gameStarted) return;
+
+      ensureAudioContext();
+      recordCurrentTurnStats();
+
+      state.currentIndex = (state.currentIndex + 1) % state.activePlayers.length;
+      state.remainingSeconds = state.totalSeconds;
+      state.dingPlayed = false;
+      state.zeroSoundPlayed = false;
 
       updatePlayView();
-    }, 1000);
-  }
-
-  function stopCountdown() {
-    if (state.intervalId) {
-      window.clearInterval(state.intervalId);
-      state.intervalId = null;
-    }
-  }
-
-  function advanceTurn() {
-    if (!state.activePlayers.length || !state.gameStarted) return;
-
-    ensureAudioContext();
-    recordCurrentTurnStats();
-
-    state.currentIndex = (state.currentIndex + 1) % state.activePlayers.length;
-    state.remainingSeconds = state.totalSeconds;
-    state.dingPlayed = false;
-    state.zeroSoundPlayed = false;
-
-    updatePlayView();
-  }
-
-  function resetGame() {
-    stopCountdown();
-    els.playView.classList.remove('active');
-    els.playView.setAttribute('aria-hidden', 'true');
-    state.remainingSeconds = state.totalSeconds;
-    state.currentIndex = 0;
-    state.activePlayers = [];
-    state.dingPlayed = false;
-    state.zeroSoundPlayed = false;
-    state.gameStarted = false;
-    updatePlayView();
-  }
-
-  function restoreDefaults() {
-    stopCountdown();
-    state.players = structuredClone(defaults);
-    els.minutesInput.value = '2';
-    els.secondsInput.value = '0';
-    state.stats = {};
-    updateStatsButtons();
-    persistState(true);
-    renderPlayers();
-    closeStats();
-    resetGame();
-  }
-
-  function persistState(clear = false) {
-    if (clear) {
-      localStorage.removeItem('rummikub-turn-counter-state');
-      return;
     }
 
-    const snapshot = {
-      minutes: clamp(Number(els.minutesInput.value || 0), 0, 59),
-      seconds: clamp(Number(els.secondsInput.value || 0), 0, 59),
-      players: state.players
-    };
-
-    localStorage.setItem('rummikub-turn-counter-state', JSON.stringify(snapshot));
-  }
-
-  function loadPersistedState() {
-    try {
-      const raw = localStorage.getItem('rummikub-turn-counter-state');
-      if (!raw) return;
-
-      const saved = JSON.parse(raw);
-
-      if (Array.isArray(saved.players) && saved.players.length === 4) {
-        state.players = saved.players.map((player, index) => ({
-          enabled: Boolean(player.enabled),
-          name: typeof player.name === 'string' ? player.name : defaults[index].name,
-          seat: ['top', 'right', 'bottom', 'left'].includes(player.seat) ? player.seat : defaults[index].seat,
-          order: ['1', '2', '3', '4'].includes(String(player.order)) ? String(player.order) : defaults[index].order
-        }));
-      }
-
-      if (Number.isFinite(saved.minutes) && minuteOptions.includes(clamp(saved.minutes, 0, 59))) {
-        els.minutesInput.value = String(clamp(saved.minutes, 0, 59));
-      }
-
-      if (Number.isFinite(saved.seconds) && secondOptions.includes(clamp(saved.seconds, 0, 59))) {
-        els.secondsInput.value = String(clamp(saved.seconds, 0, 59));
-      }
-    } catch (error) {
-      console.warn('Unable to load saved state', error);
+    function resetGame() {
+      stopCountdown();
+      els.playView.classList.remove('active');
+      els.playView.setAttribute('aria-hidden', 'true');
+      state.remainingSeconds = state.totalSeconds;
+      state.currentIndex = 0;
+      state.activePlayers = [];
+      state.dingPlayed = false;
+      state.zeroSoundPlayed = false;
+      state.gameStarted = false;
     }
-  }
 
-  els.startBtn.addEventListener('click', startGame);
-  els.showStatsBtn.addEventListener('click', showStats);
-  els.restoreBtn.addEventListener('click', restoreDefaults);
-  els.resetBtn.addEventListener('click', resetGame);
-  els.advanceBtn.addEventListener('click', advanceTurn);
-  els.playStatsBtn.addEventListener('click', showStats);
-  els.closeStatsBtn.addEventListener('click', closeStats);
-
-  els.statsModal.addEventListener('click', (event) => {
-    if (event.target === els.statsModal) {
+    function restoreDefaults() {
+      stopCountdown();
+      state.players = structuredClone(defaults);
+      els.minutesInput.value = '2';
+      els.secondsInput.value = '0';
+      state.stats = {};
+      updateStatsButtons();
+      persistState(true);
+      renderPlayers();
       closeStats();
+      resetGame();
     }
-  });
 
-  ['pointerdown', 'touchstart', 'click'].forEach(eventName => {
-    window.addEventListener(eventName, ensureAudioContext, { passive: true });
-  });
+    function persistState(clear = false) {
+      if (clear) {
+        localStorage.removeItem('rummikub-turn-counter-state');
+        return;
+      }
 
-  els.minutesInput.addEventListener('change', () => { validateConfig(); persistState(); });
-  els.secondsInput.addEventListener('change', () => { validateConfig(); persistState(); });
+      const snapshot = {
+        minutes: clamp(Number(els.minutesInput.value || 0), 0, 59),
+        seconds: clamp(Number(els.secondsInput.value || 0), 0, 59),
+        players: state.players
+      };
 
-  populateTimeSelectors();
-  loadPersistedState();
-  renderPlayers();
-  updateStatsButtons();
+      localStorage.setItem('rummikub-turn-counter-state', JSON.stringify(snapshot));
+    }
 
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', function () {
-      navigator.serviceWorker.register('../../sw.js').catch(function () {});
+    function loadPersistedState() {
+      try {
+        const raw = localStorage.getItem('rummikub-turn-counter-state');
+        if (!raw) return;
+
+        const saved = JSON.parse(raw);
+
+        if (Array.isArray(saved.players) && saved.players.length === 4) {
+          state.players = saved.players.map((player, index) => ({
+            enabled: Boolean(player.enabled),
+            name: typeof player.name === 'string' ? player.name : defaults[index].name,
+            seat: ['top', 'right', 'bottom', 'left'].includes(player.seat) ? player.seat : defaults[index].seat,
+            order: ['1', '2', '3', '4'].includes(String(player.order)) ? String(player.order) : defaults[index].order
+          }));
+        }
+
+        if (Number.isFinite(saved.minutes) && minuteOptions.includes(clamp(saved.minutes, 0, 59))) {
+          els.minutesInput.value = String(clamp(saved.minutes, 0, 59));
+        }
+
+        if (Number.isFinite(saved.seconds) && secondOptions.includes(clamp(saved.seconds, 0, 59))) {
+          els.secondsInput.value = String(clamp(saved.seconds, 0, 59));
+        }
+      } catch (error) {
+        console.warn('Unable to load saved state', error);
+      }
+    }
+
+    els.startBtn.addEventListener('click', startGame);
+    els.showStatsBtn.addEventListener('click', showStats);
+    els.restoreBtn.addEventListener('click', restoreDefaults);
+    els.resetBtn.addEventListener('click', resetGame);
+    els.advanceBtn.addEventListener('click', advanceTurn);
+    els.playStatsBtn.addEventListener('click', showStats);
+    els.closeStatsBtn.addEventListener('click', closeStats);
+
+    els.statsModal.addEventListener('click', (event) => {
+      if (event.target === els.statsModal) {
+        closeStats();
+      }
     });
-  }
-</script>
+
+    ['pointerdown', 'touchstart', 'click'].forEach(eventName => {
+      window.addEventListener(eventName, ensureAudioContext, { passive: true });
+    });
+
+    els.minutesInput.addEventListener('change', () => {
+      validateConfig();
+      persistState();
+    });
+
+    els.secondsInput.addEventListener('change', () => {
+      validateConfig();
+      persistState();
+    });
+
+    populateTimeSelectors();
+    loadPersistedState();
+    renderPlayers();
+    updateStatsButtons();
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', function () {
+        navigator.serviceWorker.register('../../sw.js').catch(function () {});
+      });
+    }
+  </script>
 </body>
 </html>
